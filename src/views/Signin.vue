@@ -58,6 +58,7 @@ export default {
 				if (response.data.ativo === false) throw new 'Usuário inativo!'()
 
 				this.$store.dispatch('login', response.data)
+				
 				this.$router.push('/')
 			} catch (error) {
 				this.showError('Usuário e/ou senha inválidos!')

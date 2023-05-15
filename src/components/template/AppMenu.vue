@@ -18,6 +18,12 @@
 export default {
 	data: () => ({
 		links: [
+		{
+				to: '/',
+				icon: 'mdi-home-city',
+				text: 'Inicio',
+				admin: false
+			},
 			{
 				to: '/clientes',
 				icon: 'people',
