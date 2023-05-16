@@ -31,6 +31,12 @@ export default {
 				admin: false
 			},
 			{
+				to: '/seguradoras',
+				icon: 'mdi-car-key',
+				text: 'seguradoras',
+				admin: false
+			},
+			{
 				to: '/veiculos',
 				icon: 'mdi-car-multiple',
 				text: 'Veículos',
