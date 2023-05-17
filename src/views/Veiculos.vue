@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- <VeiculosDialog :dialog="dialog" :veiculoId="veiculoId" @dialogClose="dialogClose" /> -->
+		<VeiculosDialog :dialog="dialog" :veiculoId="veiculoId" @dialogClose="dialogClose" />
 		<v-card>
 			<v-card-title>
 				<v-icon left color="primary">mdi-car-hatchback</v-icon>Cadastro de Veículos
@@ -81,7 +81,7 @@
 					this.loading = false
 				}
 			},
-			veiculoSelected(usuario) {
+			veiculoSelected(veiculo) {
 				this.dialog = true
 				this.veiculoId = veiculo.id
 			},
