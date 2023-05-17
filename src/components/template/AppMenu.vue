@@ -48,6 +48,13 @@ export default {
 				text: 'Usuários',
 				admin: true
 			},
+			{
+				to: '/locacoes',
+				icon: 'mdi-handshake',
+				text: 'Locações',
+				admin: true
+			},
+			
 		]
 	}),
 	computed: {

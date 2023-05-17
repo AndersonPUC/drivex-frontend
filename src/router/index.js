@@ -8,6 +8,7 @@ import Usuarios from '../views/Usuarios.vue'
 import Clientes from '../views/Clientes.vue'
 import Seguradoras from '../views/Seguradoras.vue'
 import Veiculos from '../views/Veiculos.vue'
+import Locacao from '../views/Locacao.vue'
 
 
 Vue.use(VueRouter)
@@ -47,6 +48,11 @@ const routes = [
 		path: '/usuarios',
 		name: 'Usuários',
 		component: Usuarios
+	},
+	{
+		path: '/locacoes',
+		name: 'Locação',
+		component: Locacao
 	},
 ]
 
