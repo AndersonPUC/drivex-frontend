@@ -6,6 +6,8 @@ import Signin from '../views/Signin.vue'
 import Signup from '../views/Signup.vue'
 import Usuarios from '../views/Usuarios.vue'
 import Clientes from '../views/Clientes.vue'
+import Seguradoras from '../views/Seguradoras.vue'
+
 
 Vue.use(VueRouter)
 
@@ -19,6 +21,11 @@ const routes = [
 		path: '/clientes',
 		name: 'Clientes',
 		component: Clientes
+	},
+	{
+		path: '/seguradoras',
+		name: 'Seguradoras',
+		component: Seguradoras
 	},
 	{
 		path: '/signin',

@@ -6,26 +6,26 @@
 				<v-icon left color="primary">people</v-icon>Cadastro de Clientes
 			</v-card-title>
 			<v-card-text>
-				<v-text-field
-					v-model="search"
-					append-icon="search"
-					label="Pesquisar pelo Nome, CPF ou E-mail"
-					single-line
-					hide-details
-				></v-text-field>
-				<v-data-table
-					:headers="headers"
-					:items="clientes"
-					:options.sync="options"
-					:server-items-length="total"
-					class="elevation-1"
-					:loading="loading"
-					@click:row="clienteSelected"
-					dense>
-					<template v-slot:[`item.createdAt`]="{ item }">
-						{{ convertDate(item.createdAt) }}
-					</template>
-				</v-data-table>
+				<v-row>
+					<v-col cols="11" sm="11" md="11">
+						<v-text-field
+						v-model="search"
+						append-icon="search"
+						label="Pesquisar pelo Nome, CPF ou E-mail"
+						single-line
+						hide-details></v-text-field>
+					</v-col>
+					<v-col cols="1" sm="1" md="1">
+						<v-btn color="primary" text block @click="addCliente()">Novo<v-icon right dark> mdi-plus</v-icon></v-btn>
+					</v-col>
+				</v-row>
+				<v-row>
+					<v-col cols="12" sm="12" md="12">
+						<v-data-table :headers="headers" :items="clientes" :options.sync="options" :server-items-length="total" class="elevation-1" :loading="loading" @click:row="clienteSelected" dense>
+							<template v-slot:[`item.createdAt`]="{ item }"> {{ convertDate(item.createdAt) }} </template>
+						</v-data-table>
+					</v-col>
+				</v-row>
 			</v-card-text>
 		</v-card>
 	</div>
@@ -84,10 +84,14 @@
 				this.dialog = true
 				this.clienteId = cliente.id
 			},
+			addCliente(){
+				this.dialog = true
+				this.clienteId = ''
+			},
 			dialogClose() {
 				this.usuarioId = ''
 				this.dialog = false
-				this.loadUsuarios()
+				this.loadClientes()
 			}
 		},
 		mounted() {

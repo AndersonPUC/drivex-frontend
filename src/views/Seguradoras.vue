@@ -3,28 +3,25 @@
 		<!-- <VeiculosDialog :dialog="dialog" :veiculoId="veiculoId" @dialogClose="dialogClose" /> -->
 		<v-card>
 			<v-card-title>
-				<v-icon left color="primary">mdi-car-hatchback</v-icon>Cadastro de Veículos
+				<v-icon left color="primary">mdi-car-key</v-icon>Cadastro de Seguradoras
 			</v-card-title>
 			<v-card-text>
 				<v-text-field
 					v-model="search"
 					append-icon="search"
-					label="Pesquisar pelo Modelo, Marca ou Placa"
+					label="Pesquisar pelo CNPJ, Nome"
 					single-line
 					hide-details
 				></v-text-field>
 				<v-data-table
 					:headers="headers"
-					:items="veiculos"
+					:items="seguradoras"
 					:options.sync="options"
 					:server-items-length="total"
 					class="elevation-1"
 					:loading="loading"
-					@click:row="veiculoSelected"
+					@click:row="seguradoraSelected"
 					dense>
-					<template v-slot:[`item.role`]="{ item }" color="primary">
-						{{ item.role == "admin_role" ? "Administrador" : "Usuário"  }}
-					</template>
 					<template v-slot:[`item.createdAt`]="{ item }">
 						{{ convertDate(item.createdAt) }}
 					</template>
@@ -35,36 +32,37 @@
 </template>
 <script>
 	import { mapMutations, mapActions } from 'vuex'
-	import VeiculosDialog from '../components/veiculos/VeiculosDialog'
+	// import VeiculosDialog from '../components/veiculos/VeiculosDialog'
 
 	export default {
-		components: { VeiculosDialog },
+		// components: { VeiculosDialog },
 		data: function() {
 			return {
-				veiculos: [],
+				seguradoras: [],
 				headers: [
 					{ text: 'ID', value: 'id' },
-					{ text: 'Nome', value: 'nome' },
+					{ text: 'CNPJ', value: 'cnpj' },
+					{ text: 'Nome Fantasia', value: 'nome_fantasia' },
+					{ text: 'Nome Social', value: 'nome_social' },
 					{ text: 'E-mail', value: 'email' },
-					{ text: 'Papel', value: 'role' },
 					{ text: 'Criado em', value: 'createdAt' },
 				],
 				loading: false,
 				search: '',
 				options: {},
 				total: 0,
-				veiculoId: '',
+				seguradoraId: '',
 				dialog: false,
 			}
 		},
 		methods: {
-			...mapActions('veiculos', ['showDialog']),
-			async loadVeiculos() {
+			...mapActions('seguradoras', ['showDialog']),
+			async loadSeguradoras() {
 				try {
 					this.loading = true
 					const { sortBy, sortDesc, page, itemsPerPage } = this.options
 
-					const response = await this.axios.get('/veiculos', {
+					const response = await this.axios.get('/seguradoras', {
 						params: {
 							page,
 							limit: itemsPerPage,
@@ -73,7 +71,7 @@
 							search: this.search,
 						}
 					})
-					this.usuarios = response.data
+					this.seguradoras = response.data
 					this.total = response.data.total
 				} catch (error) {
 					this.$store.dispatch('showError', error)
@@ -81,29 +79,29 @@
 					this.loading = false
 				}
 			},
-			veiculoSelected(usuario) {
+			seguradoraSelected(seguradora) {
 				this.dialog = true
-				this.veiculoId = veiculo.id
+				this.seguradoraId = seguradora.id
 			},
 			dialogClose() {
-				this.veiculoId = ''
+				this.seguradoraId = ''
 				this.dialog = false
-				this.loadVeiculos()
+				this.loadSeguradoras()
 			}
 		},
 		mounted() {
-			this.loadUsuarios()
+			this.loadSeguradoras()
 		},
 		watch: {
 			options: {
 				handler() {
-					this.loadUsuarios()
+					this.loadSeguradoras()
 				},
 				deep: true
 			},
 			search() {
 				if(this.search.length > 3 || this.search.length == 0)
-					this.loadUsuarios()
+					this.loadSeguradoras()
 			}
 		}
 	}
