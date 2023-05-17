@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- <VeiculosDialog :dialog="dialog" :veiculoId="veiculoId" @dialogClose="dialogClose" /> -->
+		<SeguradoraDialog :dialog="dialog" :seguradoraId="seguradoraId" @dialogClose="dialogClose" />
 		<v-card>
 			<v-card-title>
 				<v-icon left color="primary">mdi-car-key</v-icon>Cadastro de Seguradoras
@@ -32,10 +32,10 @@
 </template>
 <script>
 	import { mapMutations, mapActions } from 'vuex'
-	// import VeiculosDialog from '../components/veiculos/VeiculosDialog'
+	import SeguradoraDialog from '../components/seguradoras/SeguradoraDialog'
 
 	export default {
-		// components: { VeiculosDialog },
+		components: { SeguradoraDialog },
 		data: function() {
 			return {
 				seguradoras: [],
