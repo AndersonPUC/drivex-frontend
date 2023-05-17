@@ -74,7 +74,7 @@
 							search: this.search,
 						}
 					})
-					this.usuarios = response.data
+					this.usuarios = response.data.usuarios
 					this.total = response.data.total
 				} catch (error) {
 					this.$store.dispatch('showError', error)

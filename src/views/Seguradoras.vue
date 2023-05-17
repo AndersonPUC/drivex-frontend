@@ -71,7 +71,7 @@
 							search: this.search,
 						}
 					})
-					this.seguradoras = response.data
+					this.seguradoras = response.data.seguradoras
 					this.total = response.data.total
 				} catch (error) {
 					this.$store.dispatch('showError', error)

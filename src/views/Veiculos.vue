@@ -44,9 +44,9 @@
 				veiculos: [],
 				headers: [
 					{ text: 'ID', value: 'id' },
-					{ text: 'Nome', value: 'nome' },
-					{ text: 'E-mail', value: 'email' },
-					{ text: 'Papel', value: 'role' },
+					{ text: 'Marca', value: 'marca' },
+					{ text: 'Modelo', value: 'modelo' },
+					{ text: 'Placa', value: 'placa' },
 					{ text: 'Criado em', value: 'createdAt' },
 				],
 				loading: false,
@@ -73,7 +73,7 @@
 							search: this.search,
 						}
 					})
-					this.usuarios = response.data
+					this.veiculos = response.data.veiculos
 					this.total = response.data.total
 				} catch (error) {
 					this.$store.dispatch('showError', error)
@@ -92,18 +92,18 @@
 			}
 		},
 		mounted() {
-			this.loadUsuarios()
+			this.loadVeiculos()
 		},
 		watch: {
 			options: {
 				handler() {
-					this.loadUsuarios()
+					this.loadVeiculos()
 				},
 				deep: true
 			},
 			search() {
 				if(this.search.length > 3 || this.search.length == 0)
-					this.loadUsuarios()
+					this.loadVeiculos()
 			}
 		}
 	}

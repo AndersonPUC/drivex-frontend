@@ -72,7 +72,7 @@
 							search: this.search,
 						}
 					})
-					this.clientes = response.data
+					this.clientes = response.data.clientes
 					this.total = response.data.total
 				} catch (error) {
 					this.$store.dispatch('showError', error)
