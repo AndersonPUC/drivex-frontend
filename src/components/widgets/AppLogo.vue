@@ -1,6 +1,6 @@
 <template>
 	<span>
-		<img src="@/assets/logo_transparent_c.png" class="img-logo" height="34"/>
+		<img src="@/assets/logo.png" class="img-logo" height="60"/>
 	</span>
 </template>
 <script>

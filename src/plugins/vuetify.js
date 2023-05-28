@@ -10,14 +10,14 @@ export default new Vuetify({
 	icons: {
 		iconfont: 'md'
 	},
-	theme: {
-		themes: {
-			light: {
-				primary: colors.teal ,
-				secondary: colors.grey.darken1,
-				accent: colors.shades.black,
-				error: colors.red.accent3,
-		  	},
-		},
-	  },
+	// theme: {
+	// 	themes: {
+	// 		light: {
+	// 			primary: colors.teal ,
+	// 			secondary: colors.grey.darken1,
+	// 			accent: colors.shades.black,
+	// 			error: colors.red.accent3,
+	// 	  	},
+	// 	},
+	//   },
 })

@@ -20,7 +20,7 @@
 						<v-btn v-if="!loading" @click="login" color="primary" width="150">Entrar</v-btn>
 						<v-spacer/>
 						<div>
-							<span style="font-size: 14px;">Novo aqui? <a href="/signup" style="color: #28cc9e; font-weight: bold; font-style: normal; text-decoration: none;">Cadastre-se</a> </span>
+							<span style="font-size: 14px;">Novo aqui? <a href="/signup" style="color: #1976d2; font-weight: bold; font-style: normal; text-decoration: none;">Cadastre-se</a> </span>
 						</div>
 					</v-card-actions>	
 				</v-card>
