@@ -1,6 +1,6 @@
 <template>
 	<v-dialog v-model="clienteDialog" max-width="1024">
-		<v-form>
+		<v-form ref="form" lazy-validation>
 			<v-card>
 				<v-card-title>
 					<v-icon color="primary" left>person</v-icon>Cadastro de Cliente
@@ -212,10 +212,13 @@ export default {
 			}
 		},
 		async save() {
-			if (!this.clienteId)
-				this.addClientes()
-			else
-				this.alterarCliente()
+			if(this.$refs.form.validate()){
+				if (!this.clienteId)
+					this.addClientes()
+				else
+					this.alterarCliente()
+			}
+			
 		},
 		async addClientes() {
 			try {
@@ -229,17 +232,23 @@ export default {
 					celular: this.cliente.celular,
 					dt_nascimento: this.dateNFormatted,
 					tipo_cnh: this.cliente.tipo_cnh,
-					municipioId: this.cidadeId
+					
 				}
 
-				if (!this.endereco) {
-					this.$store.dispatch('showError', 'Não foi informado endereço')
+				let enderecoAdd = {
+					logradouro: this.endereco.logradouro,
+					bairro: this.endereco.bairro,
+					cep: this.endereco.cep,
+					complemento: this.endereco.complemento,
+					municipioId: this.cidadeId
 				}
 
 				this.loading = true
 				var response = await this.axios.post(`/clientes`, userAdd)
-
+				await this.axios.post(`/clientes`, userAdd)
+				
 				if (response.status == 200) {
+					
 					this.$store.dispatch('showSuccess', 'Cliente inserido com sucesso')
 					this.$emit('dialogClose')
 				} else {
