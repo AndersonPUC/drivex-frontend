@@ -10,7 +10,7 @@
 						<v-text-field label="ID" readonly v-model="empresa.id"></v-text-field>
 					</v-col>
 					<v-col cols="12" sm="10">
-						<v-text-field label="Nome" :readonly="!userAdmin" v-model="empresa.nome"></v-text-field>
+						<v-text-field label="Nome" readonly v-model="empresa.nome"></v-text-field>
 					</v-col>
 				</v-row>
 				<v-row>
@@ -18,10 +18,10 @@
 						<v-text-field label="Endereço" readonly v-model="empresa.endereco"></v-text-field>
 					</v-col>
 					<v-col cols="12" sm="3">
-						<v-text-field label="Estado" :readonly="!userAdmin" v-model="empresa.estado"></v-text-field>
+						<v-text-field label="Estado" readonly v-model="empresa.estado"></v-text-field>
 					</v-col>
 					<v-col cols="12" sm="2">
-						<v-text-field label="UF" :readonly="!userAdmin" v-model="empresa.uf"></v-text-field>
+						<v-text-field label="UF" readonly v-model="empresa.uf"></v-text-field>
 					</v-col>
 				</v-row>
 			</v-card-text>
