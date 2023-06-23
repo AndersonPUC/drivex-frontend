@@ -21,36 +21,36 @@
 							<v-text-field label="ID" readonly v-model="cliente.id"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="5" md="5">
-							<v-text-field label="Nome" v-model="cliente.nome"></v-text-field>
+							<v-text-field label="Nome" v-model="cliente.nome" :rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="5" md="5">
-							<v-text-field label="Sobrenome" v-model="cliente.sobrenome"></v-text-field>
+							<v-text-field label="Sobrenome" v-model="cliente.sobrenome" :rules="[rules.required]"></v-text-field>
 						</v-col>
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="CPF" v-model="cliente.cpf"></v-text-field>
+							<v-text-field label="CPF" v-model="cliente.cpf" v-mask="'###.###.###-##'" :rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="5" md="5">
-							<v-text-field label="CNH" v-model="cliente.cnh"></v-text-field>
+							<v-text-field label="CNH" v-model="cliente.cnh" v-mask="'###################################'" :rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="3" md="3">
-							<v-select label="Tipo CNH" :items="['A', 'B', 'AB']" v-model="cliente.tipo_cnh"></v-select>
+							<v-select label="Tipo CNH" :items="['A', 'B', 'AB']" v-model="cliente.tipo_cnh" :rules="[rules.required]"></v-select>
 						</v-col>
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="Celular" v-model="cliente.celular"></v-text-field>
+							<v-text-field label="Celular" v-model="cliente.celular" v-mask="'(##)#####-####'" :rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="Telefone" v-model="cliente.telefone"></v-text-field>
+							<v-text-field label="Telefone" v-model="cliente.telefone" v-mask="'(##)####-####'" :rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="4" md="4">
 							<v-menu ref="dateMenu" v-model="dateMenu" :close-on-content-click="false"
 								transition="scale-transition" offset-y max-width="290px" min-width="auto">
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field v-model="dateFormatted" label="Dt. Nascto" prepend-icon="mdi-calendar"
-										v-bind="attrs" v-on="on" readonly />
+										v-bind="attrs" v-on="on" readonly :rules="[rules.required]"/>
 								</template>
 								<v-date-picker locale="pt-br" v-model="dateNFormatted" no-title
 									@input="dateMenu = false"></v-date-picker>
@@ -66,7 +66,7 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12">
-							<v-tabs v-model="tab" grow optional>
+							<v-tabs v-model="tab" grow>
 								<v-tab>
 									<v-icon left>mdi-map-marker</v-icon>Endereço
 								</v-tab>
@@ -75,29 +75,29 @@
 										<v-row>
 											<v-col cols="12" sm="12" md="12">
 												<v-text-field label="Logradouro"
-													v-model="endereco.logradouro"></v-text-field>
+													v-model="endereco.logradouro" :rules="[rules.required]"></v-text-field>
 											</v-col>
 										</v-row>
 										<v-row>
 											<v-col cols="12" sm="3" md="3">
-												<v-text-field label="Bairro" v-model="endereco.bairro"></v-text-field>
+												<v-text-field label="Bairro" v-model="endereco.bairro" :rules="[rules.required]"></v-text-field>
 											</v-col>
 											<v-col cols="12" sm="3" md="3">
-												<v-text-field label="CEP" v-model="endereco.cep"></v-text-field>
+												<v-text-field label="CEP" v-model="endereco.cep" v-mask="'#####-###'" :rules="[rules.required]"></v-text-field>
 											</v-col>
 											<v-col cols="12" sm="3" md="3">
 												<v-select label="Estado" :items="estados" item-text="estado" item-value="id"
-													v-model="estadoId"></v-select>
+													v-model="estadoId" :rules="[rules.required]"></v-select>
 											</v-col>
 											<v-col cols="12" sm="3" md="3">
 												<v-select label="Cidade" :items="cidades" item-text="municipio"
-													item-value="id" v-model="cidadeId"></v-select>
+													item-value="id" v-model="cidadeId" :rules="[rules.required]"></v-select>
 											</v-col>
 										</v-row>
 										<v-row>
 											<v-col cols="12" sm="12" md="12">
 												<v-text-field label="Complemento"
-													v-model="endereco.complemento"></v-text-field>
+													v-model="endereco.complemento" :rules="[rules.required]"></v-text-field>
 											</v-col>
 										</v-row>
 									</v-tab-item>
@@ -121,7 +121,6 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-
 export default {
 	props: {
 		clienteId: String,
@@ -131,7 +130,7 @@ export default {
 		return {
 			cliente: {},
 			loading: false,
-			tab: null,
+			tab: true,
 			endereco: {},
 			estados: [],
 			cidades: [],
@@ -140,6 +139,7 @@ export default {
 			dateFormatted: "",
 			dateNFormatted: "",
 			dateMenu: false,
+			teste: "",
 			rules: {
 				required: value => !!value || 'Informe um valor.',
 				email: value => {
@@ -147,6 +147,7 @@ export default {
 					return pattern.test(value) || 'E-mail invalido.'
 				},
 			},
+			cpf: null,
 		}
 	},
 	computed: {
@@ -322,7 +323,7 @@ export default {
 		},
 		dateNFormatted() {
 			this.dateFormatted = this.formatDate(this.dateNFormatted)
-		}
+		},
 	}
 }
 </script>

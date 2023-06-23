@@ -6,6 +6,9 @@ import vuetify from './plugins/vuetify'
 import store from './store'
 import router from './router'
 
+import VueMask from 'v-mask'
+Vue.use(VueMask);
+
 Vue.config.productionTip = false
 
 new Vue({
