@@ -34,7 +34,7 @@
 						<v-text-field label="CNH" v-model="cliente.cnh"></v-text-field>
 					</v-col>
 					<v-col cols="12" sm="3" md="3">
-                        <v-select label="Tipo CNH" :items="['A', 'B', 'A/B']" v-model="cliente.tipo_cnh"></v-select>
+                        <v-select label="Tipo CNH" :items="['A', 'B', 'AB']" v-model="cliente.tipo_cnh"></v-select>
 					</v-col>
 				</v-row>
                 <v-row>
@@ -200,9 +200,14 @@ export default {
 					telefone: this.cliente.telefone,
 					celular: this.cliente.celular,
 					dt_nascimento: this.cliente.dt_nascimento,
-					municipioId: 488
+					tipo_cnh: this.cliente.tipo_cnh,
+					municipioId: this.cidadeId
 				}
-
+				
+				if(!this.endereco){
+					this.$store.dispatch('showError', 'Não foi informado endereço')
+				}
+				
 				this.loading = true
 				var response = await this.axios.post(`/clientes`, userAdd)
 				

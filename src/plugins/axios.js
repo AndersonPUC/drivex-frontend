@@ -6,8 +6,8 @@ import axios from 'axios'
 axios.defaults.headers.common['Authorization'] = `Bearer 123`
 
 let config = {
-	// baseURL: 'https://api-dot-drivex-386001.ue.r.appspot.com/'
-	baseURL: 'http://localhost:1010/'
+	baseURL: 'https://api-dot-drivex-386001.ue.r.appspot.com/'
+	//baseURL: 'http://localhost:1010/'
 }
 
 const _axios = axios.create(config)

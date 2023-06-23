@@ -2,7 +2,9 @@
 	<v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app>
 		<v-toolbar-title style="width: 300px" class="ml-0 pl-4 pr-0">
 			<v-app-bar-nav-icon @click.stop="toggleDrawer" />
-			
+			<span>
+				<img src="@/assets/logo.png" class="img-logo" height="60"/>
+			</span>
 		</v-toolbar-title>
 		<v-spacer />
 		<v-menu left bottom offset-y>

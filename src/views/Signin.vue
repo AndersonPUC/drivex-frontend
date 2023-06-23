@@ -1,7 +1,7 @@
 <template>
 	<v-container>
 		<v-row align="center" justify="center">
-			<v-col cols="12" sm="7" md="4">
+			<v-col cols="12" sm="5" md="5">
 				<v-card elevation="12">
 					<v-card-title>
 						<AppLogo />
@@ -27,7 +27,7 @@
 			</v-col>
 		</v-row>
 		<v-row align="center" justify="center">
-			<v-col cols="12" sm="4" md="4">
+			<v-col cols="12" sm="5" md="5">
 				<v-card elevation="12">
 					<v-alert border="left" icon="mdi-information-outline" text type="info">
 						Dados de acesso para <b>testes</b> na plataforma. Para preencher automaticamente, selecione alguma conta na tabela a seguir.
