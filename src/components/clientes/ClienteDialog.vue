@@ -171,6 +171,7 @@ export default {
 		dialogClose() {
 			this.tab = null
 			this.cliente = {}
+			this.endereco = {}
 			this.$emit('dialogClose')
 		},
 		enderecoOpen() {
@@ -183,6 +184,22 @@ export default {
 				this.loading = true
 				const response = await this.axios.get(`/clientes/${this.clienteId}`)
 				this.cliente = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async loadEnderecos() {
+			try {
+				if (this.clienteId == "0" || !this.clienteId) return
+
+				this.loading = true
+				const response = await this.axios.get(`/clientes/${this.clienteId}/endereco`)
+				this.endereco = response.data[0]
+
+				this.estadoId = this.endereco.municipio.uf.id
+				this.cidadeId = this.endereco.municipio.id
 			} catch (error) {
 				this.$store.dispatch('showError', error)
 			} finally {
@@ -245,10 +262,11 @@ export default {
 
 				this.loading = true
 				var response = await this.axios.post(`/clientes`, userAdd)
-				await this.axios.post(`/clientes`, userAdd)
 				
+
 				if (response.status == 200) {
-					
+					var id = response.data.id
+					await this.axios.post(`/clientes/${id}/endereco`, enderecoAdd)
 					this.$store.dispatch('showSuccess', 'Cliente inserido com sucesso')
 					this.$emit('dialogClose')
 				} else {
@@ -275,10 +293,19 @@ export default {
 					municipioId: this.cidadeId
 				}
 
+				let enderecoAlter = {
+					logradouro: this.endereco.logradouro,
+					bairro: this.endereco.bairro,
+					cep: this.endereco.cep,
+					complemento: this.endereco.complemento,
+					municipioId: this.cidadeId
+				}
+
 				this.loading = true
 				var response = await this.axios.put(`/clientes/${this.cliente.id}`, userAlter)
 
 				if (response.status == 200) {
+					await this.axios.put(`/clientes/${this.cliente.id}/endereco/${this.endereco.id}`, enderecoAlter)
 					this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso')
 					this.$emit('dialogClose')
 				} else {
@@ -317,8 +344,10 @@ export default {
 	},
 	watch: {
 		clienteId() {
-			if (this.clienteId)
+			if (this.clienteId){
 				this.loadClientes()
+				this.loadEnderecos()
+			}
 		},
 		tab() {
 			this.loadEstados()
