@@ -140,7 +140,6 @@ export default {
 		return {
 			cliente: {},
 			loading: false,
-			tab: true,
 			endereco: {},
 			estados: [],
 			cidades: [],
@@ -179,6 +178,13 @@ export default {
 		dialogClose() {
 			this.cliente = {}
 			this.endereco = {}
+			this.estadoId = '',
+			this.cidadeId = '',
+			this.dateFormatted = '',
+			this.dateNFormatted = '',
+			this.dateMenu = false,
+			this.estados = [],
+			this.cidades = [],
 			this.$emit('dialogClose')
 		},
 		async loadClientes() {
@@ -341,14 +347,16 @@ export default {
 			}
 		},
 		estadoId() {
-			this.loadCidades()
+			if(this.estadoId)
+				this.loadCidades()
 		},
 		'cliente.dt_nascimento'() {
 			if(this.cliente.dt_nascimento)
 				this.dateFormatted = this.formatDate(this.cliente.dt_nascimento.slice(0, 10))
 		},
 		dateNFormatted() {
-			this.dateFormatted = this.formatDate(this.dateNFormatted)
+			if(this.dateFormatted)
+				this.dateFormatted = this.formatDate(this.dateNFormatted)
 		},
 	}
 }
