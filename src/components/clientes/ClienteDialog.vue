@@ -389,7 +389,7 @@ export default {
 				this.dateFormatted = this.formatDate(this.cliente.dt_nascimento.slice(0, 10))
 		},
 		dateNFormatted() {
-			if(this.dateFormatted)
+			if(this.dateNFormatted)
 				this.dateFormatted = this.formatDate(this.dateNFormatted)
 		},
 	}
