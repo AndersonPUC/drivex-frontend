@@ -176,6 +176,7 @@ export default {
 	},
 	methods: {
 		dialogClose() {
+			this.$refs.form.resetValidation()
 			this.cliente = {}
 			this.endereco = {}
 			this.estadoId = '',
