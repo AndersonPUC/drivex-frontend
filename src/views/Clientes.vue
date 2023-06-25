@@ -20,6 +20,11 @@
 					</v-col>
 				</v-row>
 				<v-row>
+					<v-col cols="12" sm="2" md="2">
+						<v-checkbox v-model="inativo" label="Inativos"></v-checkbox>
+					</v-col>
+				</v-row>
+				<v-row>
 					<v-col cols="12" sm="12" md="12">
 						<v-data-table :headers="headers" :items="clientes" :options.sync="options" :server-items-length="total" class="elevation-1" :loading="loading" @click:row="clienteSelected" dense>
 							<template v-slot:[`item.createdAt`]="{ item }"> {{ convertDate(item.createdAt) }} </template>
@@ -53,6 +58,7 @@
 				total: 0,
 				clienteId: '',
 				dialog: false,
+				inativo: false,
 			}
 		},
 		methods: {
@@ -70,6 +76,7 @@
 							sortBy: sortBy[0],
 							sortDesc: sortDesc[0],
 							search: this.search,
+							ativo: !this.inativo,
 						}
 					})
 					this.clientes = response.data.clientes
@@ -107,6 +114,9 @@
 			search() {
 				if(this.search.length > 3 || this.search.length == 0)
 					this.loadClientes()
+			},
+			inativo() {
+				this.loadClientes()
 			}
 		}
 	}

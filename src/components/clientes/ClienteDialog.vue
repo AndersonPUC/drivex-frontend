@@ -117,8 +117,12 @@
 					</v-row>
 					<v-row>
 						<v-btn color="success" @click="save()"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
-						<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;"><v-icon
+						<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;" text><v-icon
 								left>mdi-cancel</v-icon>Cancelar</v-btn>
+						<v-btn color="error" @click="inativar()" style="margin-left: 3px; margin-right: 3px;" v-if="this.cliente.id && this.cliente.ativo"><v-icon
+								left>mdi-delete</v-icon>Inativar</v-btn>
+						<v-btn color="primary" @click="ativar()" style="margin-left: 3px; margin-right: 3px;" v-if="this.cliente.id && !this.cliente.ativo"><v-icon
+								left>mdi-recycle</v-icon>Recuperar</v-btn>
 					</v-row>
 				</v-card-text>
 				<v-card-actions>
@@ -248,6 +252,34 @@ export default {
 			}
 
 		},
+		async inativar() {
+			this.setStatus(false)
+		},
+		async ativar () {
+			this.setStatus(true)
+		},
+		async setStatus(status) {
+			try {
+				if (this.clienteId == "0" || !this.clienteId) return
+
+				let req = {
+					status: status
+				}
+
+				this.loading = true
+				const response = await this.axios.put(`/clientes/${this.clienteId}/status`, req)
+
+				if (response.status == 200) {
+					this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso.')
+					this.dialogClose()
+					//this.$emit('dialogClose')
+				}
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
 		async addClientes() {
 			try {
 				let userAdd = {
@@ -274,12 +306,12 @@ export default {
 				this.loading = true
 				var response = await this.axios.post(`/clientes`, userAdd)
 
-
 				if (response.status == 200) {
 					var id = response.data.id
 					await this.axios.post(`/clientes/${id}/endereco`, enderecoAdd)
 					this.$store.dispatch('showSuccess', 'Cliente inserido com sucesso')
-					this.$emit('dialogClose')
+					//this.$emit('dialogClose')
+					this.dialogClose()
 				} else {
 					this.$store.dispatch('showError', response.data.msg)
 				}
@@ -318,7 +350,8 @@ export default {
 				if (response.status == 200) {
 					await this.axios.put(`/clientes/${this.cliente.id}/endereco/${this.endereco.id}`, enderecoAlter)
 					this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso')
-					this.$emit('dialogClose')
+					//this.$emit('dialogClose')
+					this.dialogClose()
 				} else {
 					this.$store.dispatch('showError', response.data.msg)
 				}
