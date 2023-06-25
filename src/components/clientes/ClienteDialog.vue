@@ -374,8 +374,6 @@ export default {
 	},
 	watch: {
 		clienteId() {
-			this.loadEstados()
-			
 			if (this.clienteId) {				
 				this.loadClientes()
 				this.loadEnderecos()
@@ -393,6 +391,9 @@ export default {
 			if(this.dateNFormatted)
 				this.dateFormatted = this.formatDate(this.dateNFormatted)
 		},
+	},
+	mounted() {
+		this.loadEstados()
 	}
 }
 </script>
