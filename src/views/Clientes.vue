@@ -89,7 +89,7 @@
 				this.clienteId = ''
 			},
 			dialogClose() {
-				this.usuarioId = ''
+				this.clienteId = ''
 				this.dialog = false
 				this.loadClientes()
 			}

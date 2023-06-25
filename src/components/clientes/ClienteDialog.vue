@@ -1,6 +1,6 @@
 <template>
 	<v-dialog v-model="clienteDialog" max-width="1024">
-		<v-form ref="form" lazy-validation>
+		<v-form ref="form">
 			<v-card>
 				<v-card-title>
 					<v-icon color="primary" left>person</v-icon>Cadastro de Cliente
@@ -24,33 +24,39 @@
 							<v-text-field label="Nome" v-model="cliente.nome" :rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="5" md="5">
-							<v-text-field label="Sobrenome" v-model="cliente.sobrenome" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Sobrenome" v-model="cliente.sobrenome"
+								:rules="[rules.required]"></v-text-field>
 						</v-col>
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="CPF" v-model="cliente.cpf" v-mask="'###.###.###-##'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="CPF" v-model="cliente.cpf" v-mask="'###.###.###-##'"
+								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="5" md="5">
-							<v-text-field label="CNH" v-model="cliente.cnh" v-mask="'###################################'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="CNH" v-model="cliente.cnh" v-mask="'###################################'"
+								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="3" md="3">
-							<v-select label="Tipo CNH" :items="['A', 'B', 'AB']" v-model="cliente.tipo_cnh" :rules="[rules.required]"></v-select>
+							<v-select label="Tipo CNH" :items="['A', 'B', 'AB']" v-model="cliente.tipo_cnh"
+								:rules="[rules.required]"></v-select>
 						</v-col>
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="Celular" v-model="cliente.celular" v-mask="'(##)#####-####'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Celular" v-model="cliente.celular" v-mask="'(##) #####-####'"
+								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="Telefone" v-model="cliente.telefone" v-mask="'(##)####-####'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Telefone" v-model="cliente.telefone" v-mask="'(##) ####-####'"
+								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="4" md="4">
 							<v-menu ref="dateMenu" v-model="dateMenu" :close-on-content-click="false"
 								transition="scale-transition" offset-y max-width="290px" min-width="auto">
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field v-model="dateFormatted" label="Dt. Nascto" prepend-icon="mdi-calendar"
-										v-bind="attrs" v-on="on" readonly :rules="[rules.required]"/>
+										v-bind="attrs" v-on="on" readonly :rules="[rules.required]" />
 								</template>
 								<v-date-picker locale="pt-br" v-model="dateNFormatted" no-title
 									@input="dateMenu = false"></v-date-picker>
@@ -66,43 +72,47 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12">
-							<v-tabs v-model="tab" grow>
-								<v-tab>
-									<v-icon left>mdi-map-marker</v-icon>Endereço
-								</v-tab>
-								<v-tabs-items v-model="tab">
-									<v-tab-item key="enderecoTab">
-										<v-row>
-											<v-col cols="12" sm="12" md="12">
-												<v-text-field label="Logradouro"
-													v-model="endereco.logradouro" :rules="[rules.required]"></v-text-field>
-											</v-col>
-										</v-row>
-										<v-row>
-											<v-col cols="12" sm="3" md="3">
-												<v-text-field label="Bairro" v-model="endereco.bairro" :rules="[rules.required]"></v-text-field>
-											</v-col>
-											<v-col cols="12" sm="3" md="3">
-												<v-text-field label="CEP" v-model="endereco.cep" v-mask="'#####-###'" :rules="[rules.required]"></v-text-field>
-											</v-col>
-											<v-col cols="12" sm="3" md="3">
-												<v-select label="Estado" :items="estados" item-text="estado" item-value="id"
-													v-model="estadoId" :rules="[rules.required]"></v-select>
-											</v-col>
-											<v-col cols="12" sm="3" md="3">
-												<v-select label="Cidade" :items="cidades" item-text="municipio"
-													item-value="id" v-model="cidadeId" :rules="[rules.required]"></v-select>
-											</v-col>
-										</v-row>
-										<v-row>
-											<v-col cols="12" sm="12" md="12">
-												<v-text-field label="Complemento"
-													v-model="endereco.complemento" :rules="[rules.required]"></v-text-field>
-											</v-col>
-										</v-row>
-									</v-tab-item>
-								</v-tabs-items>
-							</v-tabs>
+							<v-card sm="12" md="12" class="mx-auto" tile>
+								<v-card-title class="justify-center">
+									<v-icon color="primary" left>mdi-map-marker</v-icon>
+									<span class="text-h6 font-weight-light">Endereço</span>
+								</v-card-title>
+							</v-card>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12">
+
+							<v-row>
+								<v-col cols="12" sm="12" md="12">
+									<v-text-field label="Logradouro" v-model="endereco.logradouro"
+										:rules="[rules.required]"></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col cols="12" sm="3" md="3">
+									<v-text-field label="Bairro" v-model="endereco.bairro"
+										:rules="[rules.required]"></v-text-field>
+								</v-col>
+								<v-col cols="12" sm="3" md="3">
+									<v-text-field label="CEP" v-model="endereco.cep" v-mask="'#####-###'"
+										:rules="[rules.required]"></v-text-field>
+								</v-col>
+								<v-col cols="12" sm="3" md="3">
+									<v-select label="Estado" :items="estados" item-text="estado" item-value="id"
+										v-model="estadoId" :rules="[rules.required]"></v-select>
+								</v-col>
+								<v-col cols="12" sm="3" md="3">
+									<v-select label="Cidade" :items="cidades" item-text="municipio" item-value="id"
+										v-model="cidadeId" :rules="[rules.required]"></v-select>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col cols="12" sm="12" md="12">
+									<v-text-field label="Complemento" v-model="endereco.complemento"
+										:rules="[rules.required]"></v-text-field>
+								</v-col>
+							</v-row>
 						</v-col>
 					</v-row>
 					<v-row>
@@ -139,7 +149,6 @@ export default {
 			dateFormatted: "",
 			dateNFormatted: "",
 			dateMenu: false,
-			teste: "",
 			rules: {
 				required: value => !!value || 'Informe um valor.',
 				email: value => {
@@ -147,7 +156,6 @@ export default {
 					return pattern.test(value) || 'E-mail invalido.'
 				},
 			},
-			cpf: null,
 		}
 	},
 	computed: {
@@ -169,13 +177,9 @@ export default {
 	},
 	methods: {
 		dialogClose() {
-			this.tab = null
 			this.cliente = {}
 			this.endereco = {}
 			this.$emit('dialogClose')
-		},
-		enderecoOpen() {
-			this.dialog_endereco = true
 		},
 		async loadClientes() {
 			try {
@@ -229,13 +233,13 @@ export default {
 			}
 		},
 		async save() {
-			if(this.$refs.form.validate()){
+			if (this.$refs.form.validate()) {
 				if (!this.clienteId)
 					this.addClientes()
 				else
 					this.alterarCliente()
 			}
-			
+
 		},
 		async addClientes() {
 			try {
@@ -249,7 +253,7 @@ export default {
 					celular: this.cliente.celular,
 					dt_nascimento: this.dateNFormatted,
 					tipo_cnh: this.cliente.tipo_cnh,
-					
+
 				}
 
 				let enderecoAdd = {
@@ -262,7 +266,7 @@ export default {
 
 				this.loading = true
 				var response = await this.axios.post(`/clientes`, userAdd)
-				
+
 
 				if (response.status == 200) {
 					var id = response.data.id
@@ -320,20 +324,6 @@ export default {
 		async resetarSenha(id) {
 			this.$store.dispatch('showError', "Não foi configurado dados de e-mail")
 		},
-		blurDate() {
-			setTimeout(() => {
-				if (this.dateMenu) {
-					this.dateMenu = false;
-				}
-			}, 200);
-		},
-		focusDate() {
-			setTimeout(() => {
-				if (!this.dateMenu) {
-					this.dateMenu = true;
-				}
-			}, 200);
-		},
 		formatDate(date) {
 			if (!date) return null
 
@@ -344,20 +334,18 @@ export default {
 	},
 	watch: {
 		clienteId() {
-			if (this.clienteId){
+			if (this.clienteId) {
+				this.loadEstados()
 				this.loadClientes()
 				this.loadEnderecos()
 			}
 		},
-		tab() {
-			this.loadEstados()
-		},
 		estadoId() {
-			console.log(this.estadoId)
 			this.loadCidades()
 		},
 		'cliente.dt_nascimento'() {
-			this.dateFormatted = this.formatDate(this.cliente.dt_nascimento.slice(0, 10))
+			if(this.cliente.dt_nascimento)
+				this.dateFormatted = this.formatDate(this.cliente.dt_nascimento.slice(0, 10))
 		},
 		dateNFormatted() {
 			this.dateFormatted = this.formatDate(this.dateNFormatted)
