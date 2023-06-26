@@ -1,8 +1,6 @@
 <template>
 	<v-dialog v-model="veiculoDialog" max-width="1024">
 		<v-form ref="form">
-
-
 			<v-card>
 				<v-card-title>
 					<v-icon color="primary" left>mdi-car-key</v-icon>Cadastro de veiculos
@@ -20,16 +18,20 @@
 				<v-card-text>
 					<v-row>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="Placa" v-model="veiculo.placa" v-mask="'NNN-NNNN'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Placa" v-mask="maskPlaca" v-model="veiculo.placa" @focus="onFocus"
+								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="Renavam" v-model="veiculo.renavam" v-mask="'###############################'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Renavam" v-model="veiculo.renavam"
+								v-mask="maskRenavam" :rules="[rules.required]" @focus="onFocus"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="2" md="2">
-							<v-text-field label="Ano fabricação" v-model="veiculo.ano_fabricacao" v-mask="'####'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Ano fabricação" v-model="veiculo.ano_fabricacao" v-mask="maskAno"
+								:rules="[rules.required]" @focus="onFocus"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="2" md="2">
-							<v-text-field label="Ano modelo" v-model="veiculo.ano_modelo" v-mask="'####'" :rules="[rules.required]"></v-text-field>
+							<v-text-field label="Ano modelo" v-model="veiculo.ano_modelo" v-mask="maskAno"
+								:rules="[rules.required]" @focus="onFocus"></v-text-field>
 						</v-col>
 					</v-row>
 					<v-row>
@@ -45,7 +47,8 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="12" md="12">
-							<v-select label="Categoria" :items="categorias" item-text="categoria" item-value="id" v-model="categoriaId" :rules="[rules.required]"></v-select>
+							<v-select label="Categoria" :items="categorias" item-text="categoria" item-value="id"
+								v-model="categoriaId" :rules="[rules.required]"></v-select>
 						</v-col>
 					</v-row>
 					<v-row>
@@ -71,7 +74,7 @@ import { mapGetters, mapState } from 'vuex'
 export default {
 	props: {
 		veiculoId: String,
-		dialog: Boolean
+		dialog: Boolean,
 	},
 	data: function () {
 		return {
@@ -79,6 +82,10 @@ export default {
 			loading: false,
 			categorias: [],
 			categoriaId: '',
+			maskPlaca:'',
+			maskRenavam: '',
+			maskAno: '',
+			resetttt: '',
 			rules: {
 				required: value => !!value || 'Informe um valor.',
 			},
@@ -92,6 +99,7 @@ export default {
 				return this.dialog
 			},
 			set() {
+				this.veiculo = {}
 				this.dialogClose()
 			}
 		},
@@ -102,10 +110,16 @@ export default {
 		}
 	},
 	methods: {
+		onFocus() {
+			this.maskPlaca = 'NNN-NNNN'
+			this.maskRenavam = '###############################'
+			this.maskAno = '####'
+		},
 		dialogClose() {
 			this.$refs.form.resetValidation()
 			this.veiculo = {}
 			this.$emit('dialogClose')
+
 		},
 		async loadVeiculos() {
 			try {
@@ -171,15 +185,14 @@ export default {
 		async addVeiculos() {
 			try {
 				let veiculoAdd = {
-					marca: this.veiculo.nome,
-					modelo: this.veiculo.sobrenome,
-					ano_fabricacao: this.veiculo.email,
-					ano_modelo: this.veiculo.cpf,
-					cor: this.veiculo.cnh,
-					placa: this.veiculo.telefone,
-					renavam: this.veiculo.celular,
-					dt_nascimento: this.veiculo.dt_nascimento,
-					categoria_id: 1
+					marca: this.veiculo.marca,
+					modelo: this.veiculo.modelo,
+					ano_fabricacao: this.veiculo.ano_fabricacao,
+					ano_modelo: this.veiculo.ano_modelo,
+					cor: this.veiculo.cor,
+					placa: this.veiculo.placa,
+					renavam: this.veiculo.renavam,
+					categoria_id: this.categoriaId
 				}
 
 				this.loading = true
@@ -200,15 +213,14 @@ export default {
 		async alterarVeiculo() {
 			try {
 				let veiculoAlter = {
-					marca: this.veiculo.nome,
-					modelo: this.veiculo.sobrenome,
-					ano_fabricacao: this.veiculo.email,
-					ano_modelo: this.veiculo.cpf,
-					cor: this.veiculo.cnh,
-					placa: this.veiculo.telefone,
-					renavam: this.veiculo.celular,
-					dt_nascimento: this.veiculo.dt_nascimento,
-					categoria_id: 1
+					marca: this.veiculo.marca,
+					modelo: this.veiculo.modelo,
+					ano_fabricacao: this.veiculo.ano_fabricacao,
+					ano_modelo: this.veiculo.ano_modelo,
+					cor: this.veiculo.cor,
+					placa: this.veiculo.placa,
+					renavam: this.veiculo.renavam,
+					categoria_id: this.categoriaId
 				}
 
 				this.loading = true
@@ -232,8 +244,11 @@ export default {
 	},
 	watch: {
 		veiculoId() {
-			if (this.veiculoId)
+			
+			if (this.veiculoId) {
+				this.veiculo = {}
 				this.loadVeiculos()
+			}
 		},
 	},
 	mounted() {

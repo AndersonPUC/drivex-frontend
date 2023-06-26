@@ -62,6 +62,7 @@ export default {
 			veiculoId: '',
 			dialog: false,
 			inativo: false,
+			veiculo: {}
 		}
 	},
 	methods: {
