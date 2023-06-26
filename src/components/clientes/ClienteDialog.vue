@@ -188,8 +188,6 @@ export default {
 			this.dateFormatted = '',
 			this.dateNFormatted = '',
 			this.dateMenu = false,
-			this.estados = [],
-			this.cidades = [],
 			this.$emit('dialogClose')
 		},
 		async loadClientes() {
