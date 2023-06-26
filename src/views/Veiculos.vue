@@ -12,7 +12,7 @@
 							single-line hide-details></v-text-field>
 					</v-col>
 					<v-col cols="1" sm="1" md="1">
-						<v-btn color="primary" text block @click="addCliente()">Novo<v-icon right dark>
+						<v-btn color="primary" text block @click="addVeiculo()">Novo<v-icon right dark>
 								mdi-plus</v-icon></v-btn>
 					</v-col>
 				</v-row>
@@ -97,7 +97,11 @@ export default {
 			this.veiculoId = ''
 			this.dialog = false
 			this.loadVeiculos()
-		}
+		},
+		addCliente() {
+			this.dialog = true
+			this.veiculoId = ''
+		},
 	},
 	mounted() {
 		this.loadVeiculos()
