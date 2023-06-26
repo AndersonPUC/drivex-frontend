@@ -75,8 +75,6 @@ export default {
 	},
 	methods: {
 		checkVisibility(role) {
-			console.log(role)
-			console.log(this.$store.getters.userRole)
 			if(role) {
 				if(role.includes('*')) return true
 				if(role && this.$store.getters.userAdmin) return true
