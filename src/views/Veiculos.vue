@@ -114,7 +114,7 @@ export default {
 				this.loadVeiculos()
 		},
 		inativo() {
-			this.loadClientes()
+			this.loadVeiculos()
 		}
 	}
 }
