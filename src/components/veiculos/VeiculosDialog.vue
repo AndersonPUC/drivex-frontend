@@ -1,59 +1,68 @@
 <template>
 	<v-dialog v-model="veiculoDialog" max-width="1024">
-		<v-card>
-			<v-card-title>
-				<v-icon color="primary" left>mdi-car-key</v-icon>Cadastro de veiculos
-				<v-tooltip bottom>
-					<template v-slot:activator="{ on }">
-						<v-icon color="primary" right v-on="on">mdi-identifier</v-icon>
-					</template>
-					<span>{{ idVeiculo }}</span>
-				</v-tooltip>
-				<v-spacer></v-spacer>
-				<v-btn icon @click="dialogClose">
-					<v-icon color="primary">close</v-icon>
-				</v-btn>
-			</v-card-title>
-			<v-card-text>
-				<v-row>
-					<v-col cols="12" sm="4" md="4">
-						<v-text-field label="Placa" v-model="veiculo.placa"></v-text-field>
-					</v-col>
-					<v-col cols="12" sm="4" md="4">
-						<v-text-field label="Renavam" v-model="veiculo.renavam"></v-text-field>
-					</v-col>
-                    <v-col cols="12" sm="2" md="2">
-						<v-text-field label="Ano fabricação" v-model="veiculo.ano_fabricacao"></v-text-field>
-					</v-col>
-                    <v-col cols="12" sm="2" md="2">
-						<v-text-field label="Ano modelo" v-model="veiculo.ano_modelo"></v-text-field>
-					</v-col>
-				</v-row>
-                <v-row>
-					<v-col cols="12" sm="6" md="6">
-						<v-text-field label="Cor" v-model="veiculo.cor"></v-text-field>
-					</v-col>
-					<v-col cols="12" sm="3" md="3">
-						<v-text-field label="Marca" v-model="veiculo.marca"></v-text-field>
-					</v-col>
-                    <v-col cols="12" sm="3" md="3">
-						<v-text-field label="Modelo" v-model="veiculo.modelo"></v-text-field>
-					</v-col>
-				</v-row>
-                <v-row>
-					<v-col cols="12" sm="12" md="12">
-						<v-select label="Categoria"></v-select>
-					</v-col>
-				</v-row>
-				<v-row>
-					<v-btn color="success" @click="save()"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
-					<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;"><v-icon left>mdi-cancel</v-icon>Cancelar</v-btn>
-				</v-row>
-			</v-card-text>
-			<v-card-actions>
-				<v-progress-linear v-if="loading" indeterminate color="primary"></v-progress-linear>
-			</v-card-actions>
-		</v-card>
+		<v-form ref="form">
+
+
+			<v-card>
+				<v-card-title>
+					<v-icon color="primary" left>mdi-car-key</v-icon>Cadastro de veiculos
+					<v-tooltip bottom>
+						<template v-slot:activator="{ on }">
+							<v-icon color="primary" right v-on="on">mdi-identifier</v-icon>
+						</template>
+						<span>{{ idVeiculo }}</span>
+					</v-tooltip>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="dialogClose">
+						<v-icon color="primary">close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-card-text>
+					<v-row>
+						<v-col cols="12" sm="4" md="4">
+							<v-text-field label="Placa" v-model="veiculo.placa" v-mask="'NNN-NNNN'" :rules="[rules.required]"></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="4" md="4">
+							<v-text-field label="Renavam" v-model="veiculo.renavam" v-mask="'###############################'" :rules="[rules.required]"></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-text-field label="Ano fabricação" v-model="veiculo.ano_fabricacao" v-mask="'####'" :rules="[rules.required]"></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-text-field label="Ano modelo" v-model="veiculo.ano_modelo" v-mask="'####'" :rules="[rules.required]"></v-text-field>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="6" md="6">
+							<v-text-field label="Cor" v-model="veiculo.cor" :rules="[rules.required]"></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="3" md="3">
+							<v-text-field label="Marca" v-model="veiculo.marca" :rules="[rules.required]"></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="3" md="3">
+							<v-text-field label="Modelo" v-model="veiculo.modelo" :rules="[rules.required]"></v-text-field>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="12" md="12">
+							<v-select label="Categoria" :items="categorias" item-text="categoria" item-value="id" v-model="categoriaId" :rules="[rules.required]"></v-select>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-btn color="success" @click="save()"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
+						<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;" text><v-icon
+								left>mdi-cancel</v-icon>Cancelar</v-btn>
+						<v-btn color="error" @click="inativar()" style="margin-left: 3px; margin-right: 3px;"
+							v-if="this.veiculo.id && this.veiculo.ativo"><v-icon left>mdi-delete</v-icon>Inativar</v-btn>
+						<v-btn color="primary" @click="ativar()" style="margin-left: 3px; margin-right: 3px;"
+							v-if="this.veiculo.id && !this.veiculo.ativo"><v-icon left>mdi-recycle</v-icon>Recuperar</v-btn>
+					</v-row>
+				</v-card-text>
+				<v-card-actions>
+					<v-progress-linear v-if="loading" indeterminate color="primary"></v-progress-linear>
+				</v-card-actions>
+			</v-card>
+		</v-form>
 	</v-dialog>
 </template>
 <script>
@@ -64,10 +73,15 @@ export default {
 		veiculoId: String,
 		dialog: Boolean
 	},
-	data: function() {
+	data: function () {
 		return {
 			veiculo: {},
 			loading: false,
+			categorias: [],
+			categoriaId: '',
+			rules: {
+				required: value => !!value || 'Informe um valor.',
+			},
 		}
 	},
 	computed: {
@@ -82,20 +96,20 @@ export default {
 			}
 		},
 		idVeiculo() {
-			if(!this.veiculoId) return "Novo"
+			if (!this.veiculoId) return "Novo"
 
 			return this.veiculoId
 		}
 	},
 	methods: {
 		dialogClose() {
-			this.tab = null
-			this.veiculo={}
+			this.$refs.form.resetValidation()
+			this.veiculo = {}
 			this.$emit('dialogClose')
 		},
 		async loadVeiculos() {
 			try {
-				if(this.veiculoId=="0" || !this.veiculoId) return
+				if (this.veiculoId == "0" || !this.veiculoId) return
 
 				this.loading = true
 				const response = await this.axios.get(`/veiculos/${this.veiculoId}`)
@@ -106,32 +120,74 @@ export default {
 				this.loading = false
 			}
 		},
-		async save() {
-			if(!this.veiculoId)
-				this.addVeiculos()
-			else 
-				this.alterarVeiculo()
-		},
-		async addVeiculos() {
+		async loadCategorias() {
 			try {
-				let userAdd = {
-					nome: this.veiculo.nome,
-					sobrenome: this.veiculo.sobrenome,
-					email: this.veiculo.email,
-					cpf: this.veiculo.cpf,
-					cnh: this.veiculo.cnh,
-					telefone: this.veiculo.telefone,
-					celular: this.veiculo.celular,
-					dt_nascimento: this.veiculo.dt_nascimento,
-					municipioId: 488
+				this.loading = true
+				const response = await this.axios.get('/manager/categorias')
+				this.categorias = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async save() {
+			if (this.$refs.form.validate()) {
+				if (!this.veiculoId)
+					this.addVeiculos()
+				else
+					this.alterarVeiculo()
+			}
+
+		},
+		async inativar() {
+			this.setStatus(false)
+		},
+		async ativar() {
+			this.setStatus(true)
+		},
+		async setStatus(status) {
+			try {
+				if (this.veiculoId == "0" || !this.veiculoId) return
+
+				let req = {
+					status: status
 				}
 
 				this.loading = true
-				var response = await this.axios.post(`/veiculos`, userAdd)
-				
-				if(response.status == 200) {
+				const response = await this.axios.put(`/veiculos/${this.veiculoId}/status`, req)
+
+				if (response.status == 200) {
+					this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso.')
+					this.dialogClose()
+					//this.$emit('dialogClose')
+				}
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async addVeiculos() {
+			try {
+				let veiculoAdd = {
+					marca: this.veiculo.nome,
+					modelo: this.veiculo.sobrenome,
+					ano_fabricacao: this.veiculo.email,
+					ano_modelo: this.veiculo.cpf,
+					cor: this.veiculo.cnh,
+					placa: this.veiculo.telefone,
+					renavam: this.veiculo.celular,
+					dt_nascimento: this.veiculo.dt_nascimento,
+					categoria_id: 1
+				}
+
+				this.loading = true
+				var response = await this.axios.post(`/veiculos`, veiculoAdd)
+
+				if (response.status == 200) {
 					this.$store.dispatch('showSuccess', 'veiculo inserido com sucesso')
-					this.$emit('dialogClose')
+					this.dialogClose()
 				} else {
 					this.$store.dispatch('showError', response.data.msg)
 				}
@@ -143,18 +199,24 @@ export default {
 		},
 		async alterarVeiculo() {
 			try {
-				let userAlter = {
-					nome: this.usuario.nome,
-					email: this.usuario.email,
-					role: this.usuario.role,
+				let veiculoAlter = {
+					marca: this.veiculo.nome,
+					modelo: this.veiculo.sobrenome,
+					ano_fabricacao: this.veiculo.email,
+					ano_modelo: this.veiculo.cpf,
+					cor: this.veiculo.cnh,
+					placa: this.veiculo.telefone,
+					renavam: this.veiculo.celular,
+					dt_nascimento: this.veiculo.dt_nascimento,
+					categoria_id: 1
 				}
 
 				this.loading = true
-				var response = await this.axios.put(`/veiculos/${this.usuario.id}`, userAlter)
-				
-				if(response.status == 200) {
+				var response = await this.axios.put(`/veiculos/${this.veiculo.id}`, veiculoAlter)
+
+				if (response.status == 200) {
 					this.$store.dispatch('showSuccess', 'veiculo alterado com sucesso')
-					this.$emit('dialogClose')
+					this.dialogClose()
 				} else {
 					this.$store.dispatch('showError', response.data.msg)
 				}
@@ -170,9 +232,12 @@ export default {
 	},
 	watch: {
 		veiculoId() {
-			if(this.veiculoId)
+			if (this.veiculoId)
 				this.loadVeiculos()
 		},
+	},
+	mounted() {
+		this.loadCategorias()
 	}
 }
 </script>
