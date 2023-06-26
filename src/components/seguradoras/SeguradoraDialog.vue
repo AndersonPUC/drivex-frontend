@@ -18,7 +18,7 @@
 				<v-card-text>
 					<v-row>
 						<v-col cols="12" sm="4" md="4">
-							<v-text-field label="CNPJ" v-model="seguradora.cnpj" v-mask="'##.###.###/####-##'"
+							<v-text-field label="CNPJ" v-model="seguradora.cnpj" v-mask="maskCnpj" @focus="onFocus"
 								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="8" md="8">
@@ -65,6 +65,7 @@ export default {
 		return {
 			seguradora: {},
 			loading: false,
+			maskCnpj: '',
 			rules: {
 				required: value => !!value || 'Informe um valor.',
 				email: value => {
@@ -96,6 +97,9 @@ export default {
 			this.$refs.form.resetValidation()
 			this.seguradora = {}
 			this.$emit('dialogClose')
+		},
+		onFocus() {
+			this.maskCnpj = '##.###.###/####-##'
 		},
 		async loadSeguradoras() {
 			try {

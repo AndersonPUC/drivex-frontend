@@ -117,7 +117,7 @@ export default {
 		dialogClose() {
 			this.$refs.form.resetValidation()
 			this.veiculo = {}
-			this.categoriaId={}
+			this.categoriaId=''
 			this.$emit('dialogClose')
 
 		},
@@ -251,7 +251,6 @@ export default {
 				this.loadVeiculos()
 			}
 		},
-		categoriaId
 	},
 	mounted() {
 		this.loadCategorias()
