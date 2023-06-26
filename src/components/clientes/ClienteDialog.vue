@@ -374,7 +374,8 @@ export default {
 	},
 	watch: {
 		clienteId() {
-			if (this.clienteId) {				
+			if (this.clienteId) {		
+				this.loadEstados()		
 				this.loadClientes()
 				this.loadEnderecos()
 			}
