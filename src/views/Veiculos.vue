@@ -98,7 +98,7 @@ export default {
 			this.dialog = false
 			this.loadVeiculos()
 		},
-		addCliente() {
+		addVeiculo() {
 			this.dialog = true
 			this.veiculoId = ''
 		},
