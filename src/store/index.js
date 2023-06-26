@@ -20,6 +20,9 @@ const store = new Vuex.Store({
 		userAdmin: state => {
 			return state.user !== null && state.user.role === "admin_role"
 		},
+		userRole: state => {
+			return state.user.role
+		}
 	},
 	mutations: {
 		toggleDrawer(state) {

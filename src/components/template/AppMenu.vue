@@ -2,7 +2,7 @@
 	<v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
 		<v-list dense>
 			<template v-for="item in links">
-				<v-list-item :key="item.text" link :to="item.to" v-if="checkVisibility(item.admin)">
+				<v-list-item :key="item.text" link :to="item.to" v-if="checkVisibility(item.role)">
 					<v-list-item-action>
 						<v-icon>{{ item.icon }}</v-icon>
 					</v-list-item-action>
@@ -17,44 +17,50 @@
 <script>
 export default {
 	data: () => ({
+		// 'admin_role', 'rental_role', 'insurance_role', 'user_role'
 		links: [
 		{
 				to: '/',
 				icon: 'mdi-home-city',
 				text: 'Inicio',
-				admin: false
+				role: ['*']
 			},
 			{
 				to: '/clientes',
 				icon: 'people',
 				text: 'Clientes',
-				admin: false
+				role: ['insurance_role']
 			},
 			{
 				to: '/seguradoras',
 				icon: 'mdi-car-key',
 				text: 'seguradoras',
-				admin: false
+				role: ['rental_role']
 			},
 			{
 				to: '/veiculos',
 				icon: 'mdi-car-multiple',
 				text: 'Veículos',
-				admin: false
+				role: ['rental_role']
 			},
 			{
 				to: '/usuarios',
 				icon: 'mdi-account-group',
 				text: 'Usuários',
-				admin: true
+				role: ['*']
 			},
 			{
 				to: '/locacoes',
 				icon: 'mdi-handshake',
 				text: 'Locações',
-				admin: true
+				role: ['insurance_role', 'rental_role']
 			},
-			
+			{
+				to: '/relatorios',
+				icon: 'mdi-file-chart',
+				text: 'Relatórios',
+				role: ['*']
+			},
 		]
 	}),
 	computed: {
@@ -68,12 +74,16 @@ export default {
 		}
 	},
 	methods: {
-		checkVisibility(admin) {
-			return true
-			// if (admin && this.$store.getters.userAdmin) {
-			// 	return true
-			// }
-			// return !admin
+		checkVisibility(role) {
+			console.log(role)
+			console.log(this.$store.getters.userRole)
+			if(role) {
+				if(role.includes('*')) return true
+				if(role && this.$store.getters.userAdmin) return true
+				if(role.includes(this.$store.getters.userRole)) return true
+			}
+			
+			return false
 		}
 	}
 }
