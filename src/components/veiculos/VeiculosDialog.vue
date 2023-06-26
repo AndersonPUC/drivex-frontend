@@ -85,7 +85,6 @@ export default {
 			maskPlaca:'',
 			maskRenavam: '',
 			maskAno: '',
-			resetttt: '',
 			rules: {
 				required: value => !!value || 'Informe um valor.',
 			},
@@ -112,12 +111,13 @@ export default {
 	methods: {
 		onFocus() {
 			this.maskPlaca = 'NNN-NNNN'
-			this.maskRenavam = '###############################'
+			this.maskRenavam = '###########'
 			this.maskAno = '####'
 		},
 		dialogClose() {
 			this.$refs.form.resetValidation()
 			this.veiculo = {}
+			this.categoriaId={}
 			this.$emit('dialogClose')
 
 		},
@@ -128,6 +128,7 @@ export default {
 				this.loading = true
 				const response = await this.axios.get(`/veiculos/${this.veiculoId}`)
 				this.veiculo = response.data
+				this.categoriaId = this.veiculo.categoriumId
 			} catch (error) {
 				this.$store.dispatch('showError', error)
 			} finally {
@@ -250,6 +251,7 @@ export default {
 				this.loadVeiculos()
 			}
 		},
+		categoriaId
 	},
 	mounted() {
 		this.loadCategorias()
