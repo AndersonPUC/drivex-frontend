@@ -95,7 +95,6 @@ export default {
 		dialogClose() {
 			this.$refs.form.resetValidation()
 			this.seguradora = {}
-			this.seguradoraId = '',
 			this.$emit('dialogClose')
 		},
 		async loadSeguradoras() {
@@ -160,7 +159,7 @@ export default {
 
 				if (response.status == 200) {
 					this.$store.dispatch('showSuccess', 'Seguradora inserido com sucesso')
-					this.$emit('dialogClose')
+					this.dialogClose()
 				} else {
 					this.$store.dispatch('showError', response.data.msg)
 				}
@@ -184,7 +183,7 @@ export default {
 
 				if (response.status == 200) {
 					this.$store.dispatch('showSuccess', 'seguradora alterado com sucesso')
-					this.$emit('dialogClose')
+					this.dialogClose()
 				} else {
 					this.$store.dispatch('showError', response.data.msg)
 				}
