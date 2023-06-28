@@ -1,38 +1,123 @@
 <template>
 	<v-dialog v-model="locacaoDialog" max-width="1024">
-		<v-card>
-			<v-card-title>
-				<v-icon color="primary" left>mdi-home-city</v-icon>Nova locação: DRIVEX
-				<v-tooltip bottom>
-					<template v-slot:activator="{ on }">
-						<v-icon color="primary" right v-on="on">mdi-identifier</v-icon>
-					</template>
-					<span>{{ idLocacao }}</span>
-				</v-tooltip>
-				<v-spacer></v-spacer>
-				<v-btn icon @click="dialogClose">
-					<v-icon color="primary">close</v-icon>
-				</v-btn>
-			</v-card-title>
-			<v-card-text>
-				<v-row>
-					<v-col cols="12" sm="1" md="1">
-						<v-text-field label="ID"></v-text-field>
-					</v-col>
-					<v-col cols="12" sm="3" md="3">
-						<v-text-field label="PREV. ENTREGA" append-icon="mdi-calendar"></v-text-field>
-					</v-col>
-					<v-col cols="12" sm="3" md="3">
-						<v-text-field label="DT. LOCAÇÃO" append-icon="mdi-calendar"></v-text-field>
-					</v-col>
-					<v-col>
-					</v-col>
-				</v-row>
-			</v-card-text>
-			<v-card-actions>
-				<v-progress-linear v-if="loading" indeterminate color="primary"></v-progress-linear>
-			</v-card-actions>
-		</v-card>
+		<v-form ref="form">
+			<v-card>
+				<v-card-title>
+					<v-icon color="primary" left>mdi-home-city</v-icon>Nova locação: DRIVEX
+					<v-tooltip bottom>
+						<template v-slot:activator="{ on }">
+							<v-icon color="primary" right v-on="on">mdi-identifier</v-icon>
+						</template>
+						<span>{{ idLocacao }}</span>
+					</v-tooltip>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="dialogClose">
+						<v-icon color="primary">close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-card-text>
+					<v-row>
+						<v-col cols="12" sm="1" md="1">
+							<v-text-field label="ID" v-model="locacao.id" readonly></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-menu ref="dateMenuDtLocacao" v-model="dateMenuDtLocacao" :close-on-content-click="false"
+								transition="scale-transition" offset-y max-width="290px" min-width="auto">
+								<template v-slot:activator="{ on, attrs }">
+									<v-text-field v-model="dateFormattedDtLocacao" label="Dt. Locação"
+										prepend-icon="mdi-calendar" v-bind="attrs" v-on="on" readonly
+										:rules="[rules.required]" />
+								</template>
+								<v-date-picker locale="pt-br" v-model="dateNFormattedDtLocacao" no-title
+									@input="dateMenuDtLocacao = false"></v-date-picker>
+							</v-menu>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-menu ref="dateMenuPrevEntrega" v-model="dateMenuPrevEntrega" :close-on-content-click="false"
+								transition="scale-transition" offset-y max-width="290px" min-width="auto">
+								<template v-slot:activator="{ on, attrs }">
+									<v-text-field v-model="dateFormattedPrevEntrega" label="Prev. Entrega"
+										prepend-icon="mdi-calendar" v-bind="attrs" v-on="on" readonly
+										:rules="[rules.required]" />
+								</template>
+								<v-date-picker locale="pt-br" v-model="dateNFormattedPrevEntrega" no-title
+									@input="dateMenuPrevEntrega = false"></v-date-picker>
+							</v-menu>
+						</v-col>
+						<v-col cols="12" sm="3" md="3">
+							<v-checkbox v-model="locacao.inativo" label="Lavagem Inclusa"></v-checkbox>
+						</v-col>
+						<v-col cols="12" sm="4" md="4">
+							<v-row>
+								<v-spacer />
+								<v-card-title align-content="center">Custo Previsto: R$ {{ this.custoPrevisto
+								}}</v-card-title>
+							</v-row>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="10" md="10">
+							<v-select label="Cliente" :items="clientes" item-text="cliente" item-value="id"
+								v-model="clienteId" :rules="[rules.required]"></v-select>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-btn color="primary" text block><v-icon left>mdi-open-in-new</v-icon>Cliente</v-btn>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="3" md="3">
+							<v-select label="Categoria" :items="categorias" item-text="cliente" item-value="id"
+								v-model="categoriaId" :rules="[rules.required]"></v-select>
+						</v-col>
+						<v-col cols="12" sm="3" md="3">
+							<v-select label="Marca" :items="marcas" item-text="cliente" item-value="id" v-model="marcaId"
+								:rules="[rules.required]"></v-select>
+						</v-col>
+						<v-col cols="12" sm="4" md="4">
+							<v-select label="Modelo" :items="modelos" item-text="cliente" item-value="id" v-model="modeloId"
+								:rules="[rules.required]"></v-select>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-btn color="primary" text block><v-icon left>mdi-open-in-new</v-icon>Veiculo</v-btn>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="2" md="2">
+							<v-select label="Categoria" :items="nivelcombustivel" v-model="nivelCombustivelSelected"
+								:rules="[rules.required]"></v-select>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-text-field label="KM Inicial" v-model="locacao.km_inicial" v-mask="'#########'"
+								:rules="[rules.required]"></v-text-field>
+						</v-col>
+						<v-col cols="12" sm="2" md="2">
+							<v-text-field label="KM Final" v-model="locacao.km_final" v-mask="'#########'"
+								:rules="[rules.required]"></v-text-field>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="12" md="12">
+							<v-text-field label="OBS" v-model="locacao.observacoes"
+								:rules="[rules.required]"></v-text-field>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="12" sm="12" md="12">
+							<v-btn color="success"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
+							<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;"
+								text><v-icon left>mdi-cancel</v-icon>Cancelar</v-btn>
+							<!-- <v-btn color="error"  style="margin-left: 3px; margin-right: 3px;" v-if="this.cliente.id && this.cliente.ativo"><v-icon
+								left>mdi-delete</v-icon>Inativar</v-btn>
+						<v-btn color="primary"  style="margin-left: 3px; margin-right: 3px;" v-if="this.cliente.id && !this.cliente.ativo"><v-icon
+								left>mdi-recycle</v-icon>Recuperar</v-btn> -->
+						</v-col>
+					</v-row>
+				</v-card-text>
+				<v-card-actions>
+					<v-progress-linear v-if="loading" indeterminate color="primary"></v-progress-linear>
+				</v-card-actions>
+			</v-card>
+		</v-form>
 	</v-dialog>
 </template>
 <script>
@@ -43,10 +128,39 @@ export default {
 		locacaoId: String,
 		dialog: Boolean
 	},
-	data: function() {
+	data: function () {
 		return {
 			locacao: {},
 			loading: false,
+			dateMenuDtLocacao: false,
+			dateNFormattedDtLocacao: '',
+			dateFormattedDtLocacao: '',
+			dateMenuPrevEntrega: false,
+			dateNFormattedPrevEntrega: '',
+			dateFormattedPrevEntrega: '',
+			nivelCombustivelSelected: '4/4',
+			clientes: [],
+			categorias: [],
+			marcas: [],
+			modelos: [],
+			nivelcombustivel: [
+				'0',
+				'1/4',
+				'1/2',
+				'3/4',
+				'4/4',
+			],
+			clienteId: '',
+			marcaId: '',
+			modeloId: '',
+			categoriaId: '',
+			rules: {
+				required: value => !!value || 'Informe um valor.',
+				email: value => {
+					const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+					return pattern.test(value) || 'E-mail invalido.'
+				},
+			},
 		}
 	},
 	computed: {
@@ -61,96 +175,41 @@ export default {
 			}
 		},
 		idLocacao() {
-			if(!this.locacaoId) return "Novo"
+			if (!this.locacaoId) return "Novo"
 
 			return this.locacaoId
+		},
+		custoPrevisto() {
+			const valor = Number(280.98)
+			return valor.toFixed(2).replace('.', ',')
 		}
 	},
 	methods: {
 		dialogClose() {
 			this.tab = null
-			this.seguradora={}
+			this.seguradora = {}
 			this.$emit('dialogClose')
 		},
-		async loadSeguradoras() {
-			try {
-				// if(this.seguradoraId=="0" || !this.seguradoraId) return
+		formatDate(date) {
+			if (!date) return null
 
-				// this.loading = true
-				// const response = await this.axios.get(`/seguradoras/${this.seguradoraId}`)
-				// this.seguradora = response.data
-			} catch (error) {
-				this.$store.dispatch('showError', error)
-			} finally {
-				this.loading = false
-			}
+			const [year, month, day] = date.split('-')
+			return `${day}/${month}/${year}`
 		},
-		async save() {
-			if(!this.seguradoraId)
-				this.addSeguradoras()
-			else 
-				this.alterarSeguradora()
-		},
-		async addSeguradoras() {
-			try {
-				let userAdd = {
-					nome: this.seguradora.nome,
-					sobrenome: this.seguradora.sobrenome,
-					email: this.seguradora.email,
-					cpf: this.seguradora.cpf,
-					cnh: this.seguradora.cnh,
-					telefone: this.seguradora.telefone,
-					celular: this.seguradora.celular,
-					dt_nascimento: this.seguradora.dt_nascimento,
-					municipioId: 488
-				}
-
-				this.loading = true
-				var response = await this.axios.post(`/seguradoras`, userAdd)
-				
-				if(response.status == 200) {
-					this.$store.dispatch('showSuccess', 'Seguradora inserido com sucesso')
-					this.$emit('dialogClose')
-				} else {
-					this.$store.dispatch('showError', response.data.msg)
-				}
-			} catch (error) {
-				this.$store.dispatch('showError', error)
-			} finally {
-				this.loading = false
-			}
-		},
-		async alterarSeguradora() {
-			try {
-				let userAlter = {
-					nome: this.usuario.nome,
-					email: this.usuario.email,
-					role: this.usuario.role,
-				}
-
-				this.loading = true
-				var response = await this.axios.put(`/seguradoras/${this.usuario.id}`, userAlter)
-				
-				if(response.status == 200) {
-					this.$store.dispatch('showSuccess', 'seguradora alterado com sucesso')
-					this.$emit('dialogClose')
-				} else {
-					this.$store.dispatch('showError', response.data.msg)
-				}
-			} catch (error) {
-				this.$store.dispatch('showError', error)
-			} finally {
-				this.loading = false
-			}
-		},
-		async resetarSenha(id) {
-			this.$store.dispatch('showError', "Não foi configurado dados de e-mail")
-		}
 	},
 	watch: {
 		locacaoId() {
-			if(this.locacaoId)
-				this.loadSeguradoras()
+			//if (this.locacaoId)
+			//this.loadSeguradoras()
+		},
+
+		dateNFormattedDtLocacao() {
+			if (this.dateNFormattedDtLocacao)
+				this.dateFormattedDtLocacao = this.formatDate(this.dateNFormattedDtLocacao)
+		},
+		dateNFormattedPrevEntrega() {
+			if (this.dateNFormattedPrevEntrega)
+				this.dateFormattedPrevEntrega = this.formatDate(this.dateNFormattedPrevEntrega)
 		},
 	}
 }
