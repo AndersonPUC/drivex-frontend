@@ -57,8 +57,8 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="10" md="10">
-							<v-select label="Cliente" :items="clientes" item-text="cliente" item-value="id"
-								v-model="clienteId" :rules="[rules.required]"></v-select>
+							<v-select label="Cliente" :items="clientes" item-text="nome" item-value="id" v-model="clienteId"
+								:rules="[rules.required]"></v-select>
 						</v-col>
 						<v-col cols="12" sm="2" md="2">
 							<v-btn color="primary" text block><v-icon left>mdi-open-in-new</v-icon>Cliente</v-btn>
@@ -66,15 +66,15 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="3" md="3">
-							<v-select label="Categoria" :items="categorias" item-text="cliente" item-value="id"
+							<v-select label="Categoria" :items="categorias" item-text="categoria" item-value="id"
 								v-model="categoriaId" :rules="[rules.required]"></v-select>
 						</v-col>
 						<v-col cols="12" sm="3" md="3">
-							<v-select label="Marca" :items="marcas" item-text="cliente" item-value="id" v-model="marcaId"
+							<v-select label="Marca" :items="marcas" item-text="marca" item-value="id" v-model="marcaId"
 								:rules="[rules.required]"></v-select>
 						</v-col>
 						<v-col cols="12" sm="4" md="4">
-							<v-select label="Modelo" :items="modelos" item-text="cliente" item-value="id" v-model="modeloId"
+							<v-select label="Modelo" :items="modelos" item-text="modelo" item-value="id" v-model="modeloId"
 								:rules="[rules.required]"></v-select>
 						</v-col>
 						<v-col cols="12" sm="2" md="2">
@@ -196,13 +196,79 @@ export default {
 			const [year, month, day] = date.split('-')
 			return `${day}/${month}/${year}`
 		},
+		async loadLocacoes() {
+			try {
+				if (this.locacaoId == "0" || !this.locacaoId) return
+
+				this.loading = true
+				const response = await this.axios.get(`/locacoes/${this.locacaoId}`)
+				this.locacao = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async loadClientes() {
+			try {
+				this.loading = true
+				const response = await this.axios.get(`/manager/clientes`)
+				this.clientes = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async loadCategorias() {
+			try {
+				this.loading = true
+				const response = await this.axios.get(`/manager/categorias`)
+				this.categorias = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async loadMarcas() {
+			try {
+				this.loading = true
+				const response = await this.axios.get(`/manager/marcas/`, {
+					params: { categoria: this.categoriaId }
+				})
+				this.marcas = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		async loadModelos() {
+			try {
+				this.loading = true
+				const response = await this.axios.get(`/manager/modelos`, {
+					params: { categoria: this.categoriaId, marca: this.marcaId }
+				})
+				this.modelos = response.data
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+		getAllData() {
+			this.loadClientes()
+			this.loadCategorias()
+		}
 	},
 	watch: {
 		locacaoId() {
-			//if (this.locacaoId)
-			//this.loadSeguradoras()
-		},
+			this.getAllData()
 
+			if (this.locacaoId)
+				this.loadLocacoes()
+		},
 		dateNFormattedDtLocacao() {
 			if (this.dateNFormattedDtLocacao)
 				this.dateFormattedDtLocacao = this.formatDate(this.dateNFormattedDtLocacao)
@@ -211,6 +277,14 @@ export default {
 			if (this.dateNFormattedPrevEntrega)
 				this.dateFormattedPrevEntrega = this.formatDate(this.dateNFormattedPrevEntrega)
 		},
-	}
+		categoriaId() {
+			if(this.categoriaId)
+				this.loadMarcas()
+		},
+		marcaId() {
+			if(this.marcaId)
+				this.loadModelos()
+		}
+	},
 }
 </script>
