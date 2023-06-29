@@ -25,6 +25,7 @@
 					<v-col cols="12" sm="12" md="12">
 						<v-data-table :headers="headers" :items="seguradoras" :options.sync="options"
 							:server-items-length="total" class="elevation-1" :loading="loading"
+							:footer-props="{ itemsPerPageText: 'Itens por página:', pageText: '{0}-{1} de {2}', 'items-per-page-options': [5, 10, 15, 30, 60, 100] }"
 							@click:row="seguradoraSelected" dense>
 							<template v-slot:[`item.createdAt`]="{ item }">
 								{{ convertDate(item.createdAt) }}
@@ -98,7 +99,7 @@ export default {
 		dialogClose() {
 			this.seguradoraId = ''
 			this.dialog = false
-			this.search=''
+			this.search = ''
 			this.loadSeguradoras()
 		},
 		addSeguradora() {

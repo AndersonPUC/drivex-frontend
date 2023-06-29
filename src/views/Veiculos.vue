@@ -25,6 +25,7 @@
 					<v-col cols="12" sm="12" md="12">
 						<v-data-table :headers="headers" :items="veiculos" :options.sync="options"
 							:server-items-length="total" class="elevation-1" :loading="loading" @click:row="veiculoSelected"
+							:footer-props="{ itemsPerPageText: 'Itens por página:', pageText: '{0}-{1} de {2}', 'items-per-page-options': [5, 10, 15, 30, 60, 100] }"
 							dense>
 							<template v-slot:[`item.role`]="{ item }" color="primary">
 								{{ item.role == "admin_role" ? "Administrador" : "Usuário" }}
@@ -90,7 +91,7 @@ export default {
 				this.loading = false
 			}
 		},
-		loadVeiculosSearch(){
+		loadVeiculosSearch() {
 			this.options.page = 1
 			this.loadVeiculos()
 		},
@@ -101,7 +102,7 @@ export default {
 		dialogClose() {
 			this.veiculoId = ''
 			this.dialog = false
-			this.search=''
+			this.search = ''
 			this.loadVeiculos()
 		},
 		addVeiculo() {

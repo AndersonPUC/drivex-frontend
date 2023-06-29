@@ -12,7 +12,8 @@
 							hide-details></v-text-field>
 					</v-col>
 					<v-col cols="1" sm="1" md="1">
-						<v-btn color="primary" text block @click="addLocacao()">Novo<v-icon right dark> mdi-plus</v-icon></v-btn>
+						<v-btn color="primary" text block @click="addLocacao()">Novo<v-icon right dark>
+								mdi-plus</v-icon></v-btn>
 					</v-col>
 				</v-row>
 				<v-row>
@@ -24,6 +25,7 @@
 					<v-col cols="12" sm="12" md="12">
 						<v-data-table :headers="headers" :items="locacoes" :options.sync="options"
 							:server-items-length="total" class="elevation-1" :loading="loading" @click:row="locacaoSelected"
+							:footer-props="{ itemsPerPageText: 'Itens por página:', pageText: '{0}-{1} de {2}', 'items-per-page-options': [5, 10, 15, 30, 60, 100] }"
 							dense>
 							<template v-slot:[`item.createdAt`]="{ item }"> {{ convertDate(item.createdAt) }} </template>
 							<template v-slot:[`item.dt_locacao`]="{ item }"> {{ convertDate(item.dt_locacao) }} </template>
@@ -104,7 +106,7 @@ export default {
 		},
 		dialogClose() {
 			this.locacaoId = ''
-			this.search=''
+			this.search = ''
 			this.dialog = false
 			this.loadLocacoes()
 		}
