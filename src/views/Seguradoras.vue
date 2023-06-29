@@ -87,6 +87,10 @@ export default {
 				this.loading = false
 			}
 		},
+		loadSeguradorasSearch() {
+			this.options.page = 1
+			this.loadSeguradoras()
+		},
 		seguradoraSelected(seguradora) {
 			this.dialog = true
 			this.seguradoraId = seguradora.id
@@ -94,6 +98,7 @@ export default {
 		dialogClose() {
 			this.seguradoraId = ''
 			this.dialog = false
+			this.search=''
 			this.loadSeguradoras()
 		},
 		addSeguradora() {
@@ -113,7 +118,7 @@ export default {
 		},
 		search() {
 			if (this.search.length > 3 || this.search.length == 0)
-				this.loadSeguradoras()
+				this.loadSeguradorasSearch()
 		},
 		inativo() {
 			this.loadSeguradoras()

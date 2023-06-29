@@ -90,6 +90,10 @@ export default {
 				this.loading = false
 			}
 		},
+		loadVeiculosSearch(){
+			this.options.page = 1
+			this.loadVeiculos()
+		},
 		veiculoSelected(veiculo) {
 			this.dialog = true
 			this.veiculoId = veiculo.id
@@ -97,6 +101,7 @@ export default {
 		dialogClose() {
 			this.veiculoId = ''
 			this.dialog = false
+			this.search=''
 			this.loadVeiculos()
 		},
 		addVeiculo() {
@@ -116,7 +121,7 @@ export default {
 		},
 		search() {
 			if (this.search.length > 3 || this.search.length == 0)
-				this.loadVeiculos()
+				this.loadVeiculosSearch()
 		},
 		inativo() {
 			this.loadVeiculos()

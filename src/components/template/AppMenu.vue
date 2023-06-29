@@ -34,7 +34,7 @@ export default {
 			{
 				to: '/seguradoras',
 				icon: 'mdi-car-key',
-				text: 'seguradoras',
+				text: 'Seguradoras',
 				role: ['rental_role']
 			},
 			{

@@ -87,6 +87,10 @@
 					this.loading = false
 				}
 			},
+			loadClientesSearch() {
+				this.options.page = 1
+				this.loadClientes()
+			},
 			clienteSelected(cliente) {
 				this.dialog = true
 				this.clienteId = cliente.id
@@ -98,6 +102,7 @@
 			dialogClose() {
 				this.clienteId = ''
 				this.dialog = false
+				this.search=''
 				this.loadClientes()
 			}
 		},
@@ -113,7 +118,7 @@
 			},
 			search() {
 				if(this.search.length > 3 || this.search.length == 0)
-					this.loadClientes()
+					this.loadClientesSearch()
 			},
 			inativo() {
 				this.loadClientes()

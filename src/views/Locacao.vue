@@ -90,6 +90,10 @@ export default {
 				this.loading = false
 			}
 		},
+		loadLocacoesSearch() {
+			this.options.page = 1
+			this.loadLocacoes()
+		},
 		locacaoSelected(locacao) {
 			this.dialog = true
 			this.locacaoId = locacao.id
@@ -100,6 +104,7 @@ export default {
 		},
 		dialogClose() {
 			this.locacaoId = ''
+			this.search=''
 			this.dialog = false
 			this.loadLocacoes()
 		}
@@ -116,7 +121,7 @@ export default {
 		},
 		search() {
 			if (this.search.length > 3 || this.search.length == 0)
-				this.loadLocacoes()
+				this.loadLocacoesSearch()
 		},
 		inativo() {
 			this.loadLocacoes()
