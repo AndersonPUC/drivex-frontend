@@ -12,7 +12,7 @@
 							hide-details></v-text-field>
 					</v-col>
 					<v-col cols="1" sm="1" md="1">
-						<v-btn color="primary" text block>Novo<v-icon right dark> mdi-plus</v-icon></v-btn>
+						<v-btn color="primary" text block @click="addLocacao()">Novo<v-icon right dark> mdi-plus</v-icon></v-btn>
 					</v-col>
 				</v-row>
 				<v-row>
@@ -25,11 +25,13 @@
 						<v-data-table :headers="headers" :items="locacoes" :options.sync="options"
 							:server-items-length="total" class="elevation-1" :loading="loading" @click:row="locacaoSelected"
 							dense>
+							<template v-slot:[`item.createdAt`]="{ item }"> {{ convertDate(item.createdAt) }} </template>
+							<template v-slot:[`item.dt_locacao`]="{ item }"> {{ convertDate(item.dt_locacao) }} </template>
+							<template v-slot:[`item.dt_previsao_entrega`]="{ item }"> {{
+								convertDate(item.dt_previsao_entrega) }} </template>
 						</v-data-table>
 					</v-col>
 				</v-row>
-
-
 			</v-card-text>
 		</v-card>
 	</div>
@@ -46,8 +48,8 @@ export default {
 			headers: [
 				{ text: 'ID', value: 'id' },
 				{ text: 'Dt. Locação', value: 'dt_locacao' },
-				{ text: 'Dt. Prev. Entrega', value: 'dt_prev_entrega' },
-				{ text: 'Cliente', value: 'cliente' },
+				{ text: 'Dt. Prev. Entrega', value: 'dt_previsao_entrega' },
+				{ text: 'Cliente', value: 'cliente.nome' },
 				{ text: 'Km Inicial', value: 'km_inicial' },
 				{ text: 'Km Final', value: 'km_final' },
 				{ text: 'Criado em', value: 'createdAt' },
@@ -58,6 +60,7 @@ export default {
 			total: 1,
 			locacaoId: '',
 			dialog: false,
+			inativo: false,
 		}
 	},
 	methods: {
@@ -65,7 +68,7 @@ export default {
 		async loadLocacoes() {
 			try {
 				this.loading = true
-				
+
 				const { sortBy, sortDesc, page, itemsPerPage } = this.options
 
 				const response = await this.axios.get('/locacoes', {
@@ -80,7 +83,7 @@ export default {
 
 				this.locacoes = response.data.locacoes
 				this.total = response.data.total
-				
+
 			} catch (error) {
 				this.$store.dispatch('showError', error)
 			} finally {
@@ -90,6 +93,10 @@ export default {
 		locacaoSelected(locacao) {
 			this.dialog = true
 			this.locacaoId = locacao.id
+		},
+		addLocacao() {
+			this.dialog = true
+			this.locacaoId = ''
 		},
 		dialogClose() {
 			this.locacaoId = ''
