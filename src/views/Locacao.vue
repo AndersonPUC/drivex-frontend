@@ -31,6 +31,11 @@
 							<template v-slot:[`item.dt_locacao`]="{ item }"> {{ convertDate(item.dt_locacao) }} </template>
 							<template v-slot:[`item.dt_previsao_entrega`]="{ item }"> {{
 								convertDate(item.dt_previsao_entrega) }} </template>
+							<template v-slot:[`item.dt_entrega`]="{ item }">
+								<v-icon color="success" v-if="item.dt_entrega">mdi-check-circle</v-icon>
+								<v-icon color="warning" v-if="!item.dt_entrega">mdi-timer-sand</v-icon>
+								{{ getStatusText(item.dt_entrega) }}
+							</template>
 						</v-data-table>
 					</v-col>
 				</v-row>
@@ -55,6 +60,7 @@ export default {
 				{ text: 'Km Inicial', value: 'km_inicial' },
 				{ text: 'Km Final', value: 'km_final' },
 				{ text: 'Criado em', value: 'createdAt' },
+				{ text: 'Status', value: 'dt_entrega' },
 			],
 			loading: false,
 			search: '',
@@ -109,6 +115,10 @@ export default {
 			this.search = ''
 			this.dialog = false
 			this.loadLocacoes()
+		},
+		getStatusText(item) {
+			if (item) return "Entregue"
+			else return "Aguardando entrega"
 		}
 	},
 	mounted() {

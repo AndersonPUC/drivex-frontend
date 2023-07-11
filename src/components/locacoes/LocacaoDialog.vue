@@ -47,13 +47,12 @@
 						<v-col cols="12" sm="3" md="3">
 							<v-checkbox v-model="locacao.lavagem_inclusa" label="Lavagem Inclusa"></v-checkbox>
 						</v-col>
-						<!-- <v-col cols="12" sm="4" md="4">
+						<v-col cols="12" sm="4" md="4">
 							<v-row>
 								<v-spacer />
-								<v-card-title align-content="center">Custo Previsto: R$ {{ this.custoPrevisto
-								}}</v-card-title>
+								<v-card-title align-content="center">Dt.Entrega: 01/08/2023</v-card-title>
 							</v-row>
-						</v-col> -->
+						</v-col>
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="10" md="10">
@@ -83,16 +82,16 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="2" md="2">
-							<v-select label="Nivel Combustivel" :items="nivelcombustivel" v-model="locacao.nivel_combustivel"
-								:rules="[rules.required]"></v-select>
+							<v-select label="Nivel Combustivel" :items="nivelcombustivel"
+								v-model="locacao.nivel_combustivel" :rules="[rules.required]"></v-select>
 						</v-col>
 						<v-col cols="12" sm="2" md="2">
 							<v-text-field label="KM Inicial" v-model="locacao.km_inicial" v-mask="'#########'"
 								:rules="[rules.required]"></v-text-field>
 						</v-col>
 						<v-col cols="12" sm="2" md="2">
-							<v-text-field label="KM Final" v-model="locacao.km_final" :disabled="locacaoId == '' ? true : false"
-								v-mask="'#########'"></v-text-field>
+							<v-text-field label="KM Final" v-model="locacao.km_final"
+								:disabled="locacaoId == '' ? true : false" v-mask="'#########'"></v-text-field>
 						</v-col>
 					</v-row>
 					<v-row>
@@ -103,15 +102,17 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="12" md="12">
-							<v-btn color="success" @click="save()"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
+							<v-btn color="success" @click="save()" v-if="!this.locacao.dt_entrega"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
 							<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;"
 								text><v-icon left>mdi-cancel</v-icon>Cancelar</v-btn>
 							<v-btn color="error" style="margin-left: 3px; margin-right: 3px;"
-								v-if="this.locacao.id && this.locacao.ativo"><v-icon
+								v-if="this.locacao.id && this.locacao.ativo && !this.locacao.dt_entrega"><v-icon
 									left>mdi-delete</v-icon>Inativar</v-btn>
 							<v-btn color="primary" style="margin-left: 3px; margin-right: 3px;"
 								v-if="this.locacao.id && !this.locacao.ativo"><v-icon
 									left>mdi-recycle</v-icon>Recuperar</v-btn>
+							<v-btn color="info" v-if="!this.locacao.dt_entrega" style="margin-left: 3px; margin-right: 3px;"><v-icon
+									left>mdi-flag</v-icon>Finalizar</v-btn>
 						</v-col>
 					</v-row>
 				</v-card-text>
@@ -288,34 +289,36 @@ export default {
 			}
 
 		},
-		// async inativar() {
-		// 	this.setStatus(false)
-		// },
-		// async ativar () {
-		// 	this.setStatus(true)
-		// },
-		// async setStatus(status) {
-		// 	try {
-		// 		if (this.clienteId == "0" || !this.clienteId) return
+		async inativar() {
+			this.setStatus(false)
+		},
+		async ativar () {
+			this.setStatus(true)
+		},
+		async setStatus(status) {
+			try {
+				if (this.clienteId == "0" || !this.clienteId) return
 
-		// 		let req = {
-		// 			status: status
-		// 		}
+				let req = {
+					status: status
+				}
 
-		// 		this.loading = true
-		// 		const response = await this.axios.put(`/clientes/${this.clienteId}/status`, req)
+				this.loading = true
+				const response = await this.axios.put(`/clientes/${this.clienteId}/status`, req)
 
-		// 		if (response.status == 200) {
-		// 			this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso.')
-		// 			this.dialogClose()
-		// 			//this.$emit('dialogClose')
-		// 		}
-		// 	} catch (error) {
-		// 		this.$store.dispatch('showError', error)
-		// 	} finally {
-		// 		this.loading = false
-		// 	}
-		// },
+				if (response.status == 200) {
+					this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso.')
+					this.dialogClose()
+					//this.$emit('dialogClose')
+				}
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
+
+		
 		async addLocacao() {
 			try {
 				let locacaoAdd = {
@@ -330,7 +333,7 @@ export default {
 					seguradora_id: 51
 				}
 
-				
+
 				this.loading = true
 				var response = await this.axios.post(`/locacoes`, locacaoAdd)
 
