@@ -47,10 +47,10 @@
 						<v-col cols="12" sm="3" md="3">
 							<v-checkbox v-model="locacao.lavagem_inclusa" label="Lavagem Inclusa"></v-checkbox>
 						</v-col>
-						<v-col cols="12" sm="4" md="4">
+						<v-col cols="12" sm="4" md="4" v-if="this.locacao.dt_entrega">
 							<v-row>
 								<v-spacer />
-								<v-card-title align-content="center">Dt.Entrega: 01/08/2023</v-card-title>
+								<v-card-title align-content="center">Dt.Entrega: {{formatDate(this.locacao.dt_entrega.slice(0, 10))}}</v-card-title>
 							</v-row>
 						</v-col>
 					</v-row>
@@ -102,17 +102,18 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="12" md="12">
-							<v-btn color="success" @click="save()" v-if="!this.locacao.dt_entrega"><v-icon left>mdi-content-save</v-icon>Salvar</v-btn>
+							<v-btn color="success" @click="save()" v-if="!this.locacao.dt_entrega"><v-icon
+									left>mdi-content-save</v-icon>Salvar</v-btn>
 							<v-btn color="error" @click="dialogClose" style="margin-left: 3px; margin-right: 3px;"
 								text><v-icon left>mdi-cancel</v-icon>Cancelar</v-btn>
-							<v-btn color="error" style="margin-left: 3px; margin-right: 3px;"
+							<v-btn color="error" @click="inativar()" style="margin-left: 3px; margin-right: 3px;"
 								v-if="this.locacao.id && this.locacao.ativo && !this.locacao.dt_entrega"><v-icon
 									left>mdi-delete</v-icon>Inativar</v-btn>
-							<v-btn color="primary" style="margin-left: 3px; margin-right: 3px;"
+							<v-btn color="primary" @click="ativar()" style="margin-left: 3px; margin-right: 3px;"
 								v-if="this.locacao.id && !this.locacao.ativo"><v-icon
 									left>mdi-recycle</v-icon>Recuperar</v-btn>
-							<v-btn color="info" v-if="!this.locacao.dt_entrega" style="margin-left: 3px; margin-right: 3px;"><v-icon
-									left>mdi-flag</v-icon>Finalizar</v-btn>
+							<v-btn color="info" v-if="!this.locacao.dt_entrega" @click="finalizar()"
+								style="margin-left: 3px; margin-right: 3px;"><v-icon left>mdi-flag</v-icon>Finalizar</v-btn>
 						</v-col>
 					</v-row>
 				</v-card-text>
@@ -292,22 +293,43 @@ export default {
 		async inativar() {
 			this.setStatus(false)
 		},
-		async ativar () {
+		async ativar() {
 			this.setStatus(true)
+		},
+		async finalizar() {
+			try {
+				if (this.locacaoId == "0" || !this.locacaoId) return
+
+				let req = {
+					km_final: this.locacao.km_final
+				}
+
+				this.loading = true
+				const response = await this.axios.put(`/locacoes/${this.locacaoId}/finalizar`, req)
+
+				if (response.status == 200) {
+					this.$store.dispatch('showSuccess', 'Locação finalizada com sucesso.')
+					this.dialogClose()
+				}
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
 		},
 		async setStatus(status) {
 			try {
-				if (this.clienteId == "0" || !this.clienteId) return
+				if (this.locacaoId == "0" || !this.locacaoId) return
 
 				let req = {
 					status: status
 				}
 
 				this.loading = true
-				const response = await this.axios.put(`/clientes/${this.clienteId}/status`, req)
+				const response = await this.axios.put(`/locacoes/${this.locacaoId}/status`, req)
 
 				if (response.status == 200) {
-					this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso.')
+					this.$store.dispatch('showSuccess', 'Locação alterado com sucesso.')
 					this.dialogClose()
 					//this.$emit('dialogClose')
 				}
@@ -318,7 +340,7 @@ export default {
 			}
 		},
 
-		
+
 		async addLocacao() {
 			try {
 				let locacaoAdd = {

@@ -7,10 +7,10 @@
 			</v-card-title>
 			<v-card-text>
 				<v-row>
-					<v-col cols="11" sm="11" md="11">
+					<!-- <v-col cols="11" sm="11" md="11">
 						<v-text-field v-model="search" append-icon="search" label="Pesquisar" single-line
 							hide-details></v-text-field>
-					</v-col>
+					</v-col> -->
 					<v-col cols="1" sm="1" md="1">
 						<v-btn color="primary" text block @click="addLocacao()">Novo<v-icon right dark>
 								mdi-plus</v-icon></v-btn>
@@ -63,7 +63,7 @@ export default {
 				{ text: 'Status', value: 'dt_entrega' },
 			],
 			loading: false,
-			search: '',
+			// search: '',
 			options: {},
 			total: 1,
 			locacaoId: '',
@@ -85,7 +85,8 @@ export default {
 						limit: itemsPerPage,
 						sortBy: sortBy[0],
 						sortDesc: sortDesc[0],
-						search: this.search,
+						// search: this.search,
+						ativo: !this.inativo,
 					}
 				})
 
@@ -112,7 +113,7 @@ export default {
 		},
 		dialogClose() {
 			this.locacaoId = ''
-			this.search = ''
+			// this.search = ''
 			this.dialog = false
 			this.loadLocacoes()
 		},
@@ -131,10 +132,10 @@ export default {
 			},
 			deep: true
 		},
-		search() {
-			if (this.search.length > 3 || this.search.length == 0)
-				this.loadLocacoesSearch()
-		},
+		// search() {
+		// 	if (this.search.length > 3 || this.search.length == 0)
+		// 		this.loadLocacoesSearch()
+		// },
 		inativo() {
 			this.loadLocacoes()
 		}
