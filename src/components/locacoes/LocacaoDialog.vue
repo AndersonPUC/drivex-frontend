@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="locacaoDialog" max-width="1024">
+	<v-dialog v-model="locacaoDialog" max-width="1024" id="printable-content">
 		<v-form ref="form">
 			<v-card>
 				<v-card-title>
@@ -50,7 +50,8 @@
 						<v-col cols="12" sm="4" md="4" v-if="this.locacao.dt_entrega">
 							<v-row>
 								<v-spacer />
-								<v-card-title align-content="center">Dt.Entrega: {{formatDate(this.locacao.dt_entrega.slice(0, 10))}}</v-card-title>
+								<v-card-title align-content="center">Dt.Entrega:
+									{{ formatDate(this.locacao.dt_entrega.slice(0, 10)) }}</v-card-title>
 							</v-row>
 						</v-col>
 					</v-row>
@@ -112,8 +113,12 @@
 							<v-btn color="primary" @click="ativar()" style="margin-left: 3px; margin-right: 3px;"
 								v-if="this.locacao.id && !this.locacao.ativo"><v-icon
 									left>mdi-recycle</v-icon>Recuperar</v-btn>
-							<v-btn color="info" v-if="!this.locacao.dt_entrega" @click="finalizar()"
-								style="margin-left: 3px; margin-right: 3px;"><v-icon left>mdi-flag</v-icon>Finalizar</v-btn>
+							<v-btn color="info" v-if="!this.locacao.dt_entrega && this.locacaoId && this.locacao.ativo"
+								@click="finalizar()" style="margin-left: 3px; margin-right: 3px;"><v-icon
+									left>mdi-flag</v-icon>Finalizar</v-btn>
+
+							<v-btn @click="printTest()" style="margin-left: 3px; margin-right: 3px;"><v-icon
+									left>mdi-flag</v-icon>Teste</v-btn>
 						</v-col>
 					</v-row>
 				</v-card-text>
@@ -185,6 +190,12 @@ export default {
 		},
 	},
 	methods: {
+		printTest() {
+			const printableContent = document.getElementById('printable-content')
+			const printWindow = window.open('', '', 'height=1000,width=1000')
+			printWindow.document.write(printableContent.innerHTML)
+			printWindow.print()
+		},
 		dialogClose() {
 			this.$refs.form.resetValidation()
 			this.nivelCombustivelSelected = '4/4'
@@ -384,14 +395,6 @@ export default {
 		// 			celular: this.cliente.celular,
 		// 			dt_nascimento: this.dateNFormatted ? this.dateNFormatted : this.cliente.dt_nascimento,
 		// 			tipo_cnh: this.cliente.tipo_cnh,
-		// 			municipioId: this.cidadeId
-		// 		}
-
-		// 		let enderecoAlter = {
-		// 			logradouro: this.endereco.logradouro,
-		// 			bairro: this.endereco.bairro,
-		// 			cep: this.endereco.cep,
-		// 			complemento: this.endereco.complemento,
 		// 			municipioId: this.cidadeId
 		// 		}
 

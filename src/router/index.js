@@ -9,6 +9,7 @@ import Clientes from '../views/Clientes.vue'
 import Seguradoras from '../views/Seguradoras.vue'
 import Veiculos from '../views/Veiculos.vue'
 import Locacao from '../views/Locacao.vue'
+import Relatorios from '../views/Relatorios.vue'
 
 
 Vue.use(VueRouter)
@@ -54,6 +55,11 @@ const routes = [
 		name: 'Locação',
 		component: Locacao
 	},
+	{
+		path: '/relatorios',
+		name: 'Relatórios',
+		component: Relatorios
+	}
 ]
 
 const router = new VueRouter({
