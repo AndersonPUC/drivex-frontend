@@ -1,8 +1,8 @@
 <template>
 	<v-app id="app">
 		<AppAlert />
-		<AppMenu v-if="userAtivo && !loading" />
-		<AppBar v-if="userAtivo && !loading" />
+		<AppMenu v-if="userAtivo && !loading && !this.$route.path.includes('/report/locacao/')" />
+		<AppBar v-if="userAtivo && !loading  && !this.$route.path.includes('/report/locacao/')" />
 		<AppContent v-if="!loading" />
 
 		<!-- <AppLoading v-if="loading" /> -->

@@ -1,6 +1,6 @@
-<template>
-	<v-dialog v-model="locacaoDialog" max-width="1024" id="printable-content">
-		<v-form ref="form">
+<template >
+	<v-dialog v-model="locacaoDialog" max-width="1024">
+		<v-form ref="form" id="print_locacao">
 			<v-card>
 				<v-card-title>
 					<v-icon color="primary" left>mdi-home-city</v-icon>Nova locação: DRIVEX
@@ -116,9 +116,6 @@
 							<v-btn color="info" v-if="!this.locacao.dt_entrega && this.locacaoId && this.locacao.ativo"
 								@click="finalizar()" style="margin-left: 3px; margin-right: 3px;"><v-icon
 									left>mdi-flag</v-icon>Finalizar</v-btn>
-
-							<v-btn @click="printTest()" style="margin-left: 3px; margin-right: 3px;"><v-icon
-									left>mdi-flag</v-icon>Teste</v-btn>
 						</v-col>
 					</v-row>
 				</v-card-text>
@@ -190,12 +187,6 @@ export default {
 		},
 	},
 	methods: {
-		printTest() {
-			const printableContent = document.getElementById('printable-content')
-			const printWindow = window.open('', '', 'height=1000,width=1000')
-			printWindow.document.write(printableContent.innerHTML)
-			printWindow.print()
-		},
 		dialogClose() {
 			this.$refs.form.resetValidation()
 			this.nivelCombustivelSelected = '4/4'
@@ -320,6 +311,8 @@ export default {
 
 				if (response.status == 200) {
 					this.$store.dispatch('showSuccess', 'Locação finalizada com sucesso.')
+					let route = this.$router.resolve({path: `/report/locacao/${this.locacaoId}`});
+					window.open(route.href, '_blank');
 					this.dialogClose()
 				}
 			} catch (error) {

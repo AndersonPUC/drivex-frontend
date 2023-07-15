@@ -10,6 +10,7 @@ import Seguradoras from '../views/Seguradoras.vue'
 import Veiculos from '../views/Veiculos.vue'
 import Locacao from '../views/Locacao.vue'
 import Relatorios from '../views/Relatorios.vue'
+import Report from '../views/Report.vue'
 
 
 Vue.use(VueRouter)
@@ -59,7 +60,8 @@ const routes = [
 		path: '/relatorios',
 		name: 'Relatórios',
 		component: Relatorios
-	}
+	},
+	{ path: '/report/locacao/:id', component: Report },
 ]
 
 const router = new VueRouter({
