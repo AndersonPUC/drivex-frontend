@@ -277,12 +277,6 @@ export default {
 			this.loadClientes()
 			this.loadCategorias()
 		},
-
-		///
-		///
-		///
-		///
-		///
 		async save() {
 			if (this.$refs.form.validate()) {
 				if (!this.locacaoId)
@@ -343,8 +337,6 @@ export default {
 				this.loading = false
 			}
 		},
-
-
 		async addLocacao() {
 			try {
 				let locacaoAdd = {
@@ -376,42 +368,35 @@ export default {
 				this.loading = false
 			}
 		},
-		// async alterarCliente() {
-		// 	try {
-		// 		let userAlter = {
-		// 			nome: this.cliente.nome,
-		// 			sobrenome: this.cliente.sobrenome,
-		// 			email: this.cliente.email,
-		// 			cpf: this.cliente.cpf,
-		// 			cnh: this.cliente.cnh,
-		// 			telefone: this.cliente.telefone,
-		// 			celular: this.cliente.celular,
-		// 			dt_nascimento: this.dateNFormatted ? this.dateNFormatted : this.cliente.dt_nascimento,
-		// 			tipo_cnh: this.cliente.tipo_cnh,
-		// 			municipioId: this.cidadeId
-		// 		}
+		async alterarLocacao() {
+			try {
+				let locacaoAlter = {
+					dt_locacao: this.locacao.dt_locacao,
+					dt_previsao_entrega: this.locacao.dt_previsao_entrega,
+					km_inicial: this.locacao.km_inicial,
+					observacoes: this.locacao.observacoes,
+					lavagem_inclusa: this.locacao.lavagem_inclusa ? this.locacao.lavagem_inclusa : false,
+					nivel_combustivel: this.locacao.nivel_combustivel,
+					veiculo_id: this.modeloId,
+					cliente_id: this.clienteId,
+					seguradora_id: 51
+				}
 
-		// 		this.loading = true
-		// 		var response = await this.axios.put(`/clientes/${this.cliente.id}`, userAlter)
+				this.loading = true
+				var response = await this.axios.put(`/locacoes/${this.locacao.id}`, locacaoAlter)
 
-		// 		if (response.status == 200) {
-		// 			await this.axios.put(`/clientes/${this.cliente.id}/endereco/${this.endereco.id}`, enderecoAlter)
-		// 			this.$store.dispatch('showSuccess', 'Cliente alterado com sucesso')
-		// 			//this.$emit('dialogClose')
-		// 			this.dialogClose()
-		// 		} else {
-		// 			this.$store.dispatch('showError', response.data.msg)
-		// 		}
-		// 	} catch (error) {
-		// 		this.$store.dispatch('showError', error)
-		// 	} finally {
-		// 		this.loading = false
-		// 	}
-		// },
-		///
-		///
-		///
-		///
+				if (response.status == 200) {
+					this.$store.dispatch('showSuccess', 'Locação alterada com sucesso')
+					this.dialogClose()
+				} else {
+					this.$store.dispatch('showError', response.data.msg)
+				}
+			} catch (error) {
+				this.$store.dispatch('showError', error)
+			} finally {
+				this.loading = false
+			}
+		},
 	},
 	watch: {
 		locacaoId() {
