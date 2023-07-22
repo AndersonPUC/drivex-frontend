@@ -84,14 +84,13 @@ export default {
 				if (!this.senha || this.senha === '') throw 'Senha inválida!'
 
 				const response = await this.axios.post('/signin', { email: this.email, senha: this.senha })
-
-				if (response.data.ativo === false) throw new 'Usuário inativo!'()
+				if (response.data.inativo === true) throw 'Usuário inativo!'
 
 				this.$store.dispatch('login', response.data)
 				
 				this.$router.push('/')
 			} catch (error) {
-				this.showError('Usuário e/ou senha inválidos!')
+				this.showError('Usuário e/ou senha inválidos.')
 			} finally {
 				this.loading = false
 			}
