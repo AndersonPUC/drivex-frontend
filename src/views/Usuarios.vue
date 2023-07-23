@@ -6,19 +6,26 @@
 				<v-icon left color="primary">mdi-account-group</v-icon>Cadastro de Usuários
 			</v-card-title>
 			<v-card-text>
-				<v-text-field v-model="search" append-icon="search" label="Pesquisar pelo Nome ou email" single-line
-					hide-details></v-text-field>
-				<v-data-table :headers="headers" :items="usuarios" :options.sync="options" :server-items-length="total"
-					class="elevation-1" :loading="loading"
-					:footer-props="{ itemsPerPageText: 'Itens por página:', pageText: '{0}-{1} de {2}', 'items-per-page-options': [5, 10, 15, 30, 60, 100] }"
-					@click:row="usuarioSelected" dense>
-					<template v-slot:[`item.role`]="{ item }" color="primary">
-						{{ item.role == "admin_role" ? "Administrador" : "Usuário" }}
-					</template>
-					<template v-slot:[`item.createdAt`]="{ item }">
-						{{ convertDate(item.createdAt) }}
-					</template>
-				</v-data-table>
+				<v-row>
+					<v-col cols="12" sm="12" md="12">
+						<v-text-field v-model="search" append-icon="search" label="Pesquisar pelo Nome ou email" single-line
+							hide-details></v-text-field>
+					</v-col>
+				</v-row>
+				<v-row>
+					<v-col cols="12" sm="12" md="12">
+						<v-data-table :headers="headers" :items="usuarios" :options.sync="options"
+							:server-items-length="total" class="elevation-1" :loading="loading"
+							:footer-props="{ itemsPerPageText: 'Itens por página:', pageText: '{0}-{1} de {2}', 'items-per-page-options': [5, 10, 15, 30, 60, 100] }"
+							@click:row="usuarioSelected" dense>
+							<template v-slot:[`item.role`]="{ item }" color="primary">
+								{{ getRole(item.role) }}
+							</template>
+							<template v-slot:[`item.createdAt`]="{ item }">
+								{{ convertDate(item.createdAt) }}
+							</template>
+						</v-data-table></v-col>
+				</v-row>
 			</v-card-text>
 		</v-card>
 	</div>
@@ -80,6 +87,17 @@ export default {
 			this.usuarioId = ''
 			this.dialog = false
 			this.loadUsuarios()
+		},
+		getRole(item) {
+			if (item == 'admin_role') {
+				return 'Administrador'
+			} else if (item == 'rental_role') {
+				return 'Locadora'
+			} else if (item == 'insurance_role') {
+				return 'Seguradora'
+			} else {
+				return 'Usuário'
+			}
 		}
 	},
 	mounted() {
