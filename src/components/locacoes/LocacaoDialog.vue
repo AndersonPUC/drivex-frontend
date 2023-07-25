@@ -56,13 +56,13 @@
 						</v-col>
 					</v-row>
 					<v-row>
-						<v-col cols="12" sm="10" md="10">
+						<v-col cols="12" sm="12" md="12">
 							<v-select label="Cliente" :items="clientes" item-text="nome" item-value="id" v-model="clienteId"
 								:rules="[rules.required]"></v-select>
 						</v-col>
-						<v-col cols="12" sm="2" md="2">
+						<!-- <v-col cols="12" sm="2" md="2">
 							<v-btn color="primary" text block><v-icon left>mdi-open-in-new</v-icon>Cliente</v-btn>
-						</v-col>
+						</v-col> -->
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="3" md="3">
@@ -77,9 +77,9 @@
 							<v-select label="Modelo" :items="modelos" item-text="modelo" item-value="id" v-model="modeloId"
 								:rules="[rules.required]"></v-select>
 						</v-col>
-						<v-col cols="12" sm="2" md="2">
+						<!-- <v-col cols="12" sm="2" md="2">
 							<v-btn color="primary" text block><v-icon left>mdi-open-in-new</v-icon>Veiculo</v-btn>
-						</v-col>
+						</v-col> -->
 					</v-row>
 					<v-row>
 						<v-col cols="12" sm="2" md="2">
