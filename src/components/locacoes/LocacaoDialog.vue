@@ -348,7 +348,7 @@ export default {
 					nivel_combustivel: this.locacao.nivel_combustivel,
 					veiculo_id: this.modeloId,
 					cliente_id: this.clienteId,
-					seguradora_id: 51
+					seguradora_id: 1
 				}
 
 
@@ -379,7 +379,7 @@ export default {
 					nivel_combustivel: this.locacao.nivel_combustivel,
 					veiculo_id: this.modeloId,
 					cliente_id: this.clienteId,
-					seguradora_id: 51
+					seguradora_id: 1
 				}
 
 				this.loading = true
